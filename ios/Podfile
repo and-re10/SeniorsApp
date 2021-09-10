@@ -1,0 +1,50 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '11.0'
+
+target 'seniorsApp' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
+
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+  # pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
+
+  # pod 'Firebase/Core', '~> 6.13.0'
+  # , '~> 5.19.0'
+  pod 'Firebase/CoreOnly' # Firebase/CoreOnly (= 8.6.0)
+  # pod 'Firebase/Analytics'
+  # , '~> 8.0.0'
+  # pod 'RNFS', :path => '../node_modules/react-native-fs'
+  pod 'Firebase/Messaging'
+  # , '~> 5.19.0' ou "~> 6.13.0"
+
+
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  target 'seniorsAppTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+  # use_flipper!()
+
+  post_install do |installer|
+    react_native_post_install(installer)
+  end
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera/Permission-Camera.podspec"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone/Permission-Microphone.podspec"
+end

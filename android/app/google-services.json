@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "678665691377",
+    "project_id": "seniorsapp-b809d",
+    "storage_bucket": "seniorsapp-b809d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678665691377:android:dba67bbd2e441f05ad8950",
+        "android_client_info": {
+          "package_name": "com.seniorsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678665691377-mteu421o8nofga9dsb69embcq2ughjoe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHj1qYiOhhT2yv8AkQrPLySZfbQHOD70o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678665691377-mteu421o8nofga9dsb69embcq2ughjoe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "678665691377-431s8hvce6b9dvmrvg526lp3sa8vbo8p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seniorsApp.tabtab"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
