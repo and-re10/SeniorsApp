@@ -8,7 +8,7 @@ import AuthRoutes from "./auth.routes";
 
 // Firebase Push Notifications
 // import firebase from "react-native-firebase";
-// import firebase from '@react-native-firebase/app';
+// // import firebase from '@react-native-firebase/app';
 // import messaging from '@react-native-firebase/messaging';
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 

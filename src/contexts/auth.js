@@ -75,6 +75,7 @@ export const AuthProvider = ({ children }) => {
         const response = await authSeniorsApi.post('/login-senior', {
             "code": code
         });
+        console.warn(response)
         // console.warn(response.data.senior);
         
         setUser(response.data.senior);

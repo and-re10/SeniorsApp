@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.seniorsApp.ios</string>
+			<string>com.MySeniorsApp.ios</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>seniorsAppTest</string>
+				<string>seniorsApp</string>
 			</array>
 		</dict>
 		<dict>
@@ -87,9 +87,7 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>external-accessory</string>
 		<string>fetch</string>
-		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

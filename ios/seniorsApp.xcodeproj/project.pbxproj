@@ -14,7 +14,7 @@
 		5CF72F6E6B81292E52E9671F /* libPods-seniorsApp-seniorsAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DE8FB7193A7CF6486B4DC31 /* libPods-seniorsApp-seniorsAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9E5F16A1264C22A9000DD651 /* zak_music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E5F16A0264C22A9000DD651 /* zak_music.mp3 */; };
-		9EEE92F726EA12CF00B2498B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9EEE92F626EA12CF00B2498B /* GoogleService-Info.plist */; };
+		9EEE92F926F0C29B00B2498B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9EEE92F826F0C29B00B2498B /* GoogleService-Info.plist */; };
 		A95B465C22E802DB15349B07 /* libPods-seniorsApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744E609BF62936A9C08A7C5B /* libPods-seniorsApp.a */; };
 /* End PBXBuildFile section */
 
@@ -60,7 +60,7 @@
 		9E830035267B4098001ACF67 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
 		9E830036267B4098001ACF67 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		9EEE92F526E8C6F000B2498B /* seniorsApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = seniorsApp.entitlements; path = seniorsApp/seniorsApp.entitlements; sourceTree = "<group>"; };
-		9EEE92F626EA12CF00B2498B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9EEE92F826F0C29B00B2498B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C94DB756F1BEB9E44DECDF2B /* Pods-seniorsApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seniorsApp.debug.xcconfig"; path = "Target Support Files/Pods-seniorsApp/Pods-seniorsApp.debug.xcconfig"; sourceTree = "<group>"; };
 		DAB62E8DBA072CA530C87AAE /* Pods-seniorsApp-seniorsAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seniorsApp-seniorsAppTests.debug.xcconfig"; path = "Target Support Files/Pods-seniorsApp-seniorsAppTests/Pods-seniorsApp-seniorsAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -114,8 +114,8 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				9EEE92F826F0C29B00B2498B /* GoogleService-Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				9EEE92F626EA12CF00B2498B /* GoogleService-Info.plist */,
 			);
 			name = seniorsApp;
 			sourceTree = "<group>";
@@ -291,9 +291,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EEE92F926F0C29B00B2498B /* GoogleService-Info.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				9EEE92F726EA12CF00B2498B /* GoogleService-Info.plist in Resources */,
 				9E5F16A1264C22A9000DD651 /* zak_music.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -550,7 +550,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = seniorsApp/seniorsApp.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 33B8M93Y8R;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = seniorsApp/Info.plist;
@@ -581,7 +581,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = seniorsApp/seniorsApp.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 33B8M93Y8R;
 				INFOPLIST_FILE = seniorsApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

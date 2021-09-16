@@ -6,6 +6,7 @@ const authApi = axios.create({
 
 const authSeniorsApi = axios.create({
     baseURL: 'https://test.tabtab.eu/api/'
+    // baseURL: 'http://192.168.0.156:8000/api/'
 });
 // http://192.168.0.156:8000/api/
 // https://test.tabtab.eu/api/

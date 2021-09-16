@@ -5,6 +5,7 @@ import {AppRegistry} from 'react-native';
 import React from "react";
 import App from './App';
 import {name as appName} from './app.json';
+// // import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 
 
@@ -12,13 +13,14 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
 
-// function HeadlessCheck({ isHeadless }) {
-//   if (isHeadless) {
-//     // App has been launched in the background by iOS, ignore
-//     return null;
-//   }
+function HeadlessCheck({ isHeadless }) {
+  if (isHeadless) {
+    // App has been launched in the background by iOS, ignore
+    return null;
+  }
 
-//   return <App />;
-// }
+  return <App />;
+}
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => HeadlessCheck);
+// AppRegistry.registerComponent(appName, () => App);

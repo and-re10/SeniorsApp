@@ -15,6 +15,10 @@ import {
   } from 'react-native-permissions';
 import axios from 'axios';
 
+
+// notifications firebase
+// import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
 // import firebase from "react-native-firebase"
 // import PushNotification from 'react-native-push-notification';
 
@@ -252,6 +256,58 @@ export default function ContactsPage(props) {
                     <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 20}} onPress={() => {
                         changeModalVisible(true);
                         // console.warn(`Senior-${senior.id}`);
+
+                        messaging().hasPermission().then( async enabled => {
+                            console.warn(enabled);
+                            // if (enabled) {
+                            //     console.warn('true')
+                                await messaging().registerDeviceForRemoteMessages()
+                                messaging().getToken()
+                                .then( token => {
+                                    console.warn("TOKEN: ", token);
+                                    // Alert.alert(token)
+                                    // setFBToken(token);
+                                })
+                                .catch( error => {
+                                    console.error(error)
+                                }); 
+                                
+                                messaging().onTokenRefresh( token => {
+                                    console.log("Refreshed Token: ", token);
+                                });
+                
+                                // if (role === "senior"){
+                                //     var TOPIC = `Senior-${user.user_id}`;
+                                // } else {
+                                    var TOPIC = `Famille-${senior.id}`;
+                                // }
+                                
+                                messaging()
+                                .subscribeToTopic(TOPIC)
+                                .then(() => {
+                                    console.warn(`Topic: ${TOPIC} Suscribed`);
+                                });
+                            // } else {
+                            //     // console.warn('false')
+                            //     messaging().requestPermission()
+                            //     .then( async authStatus => {
+                            //         console.warn("APNs Status: ", authStatus);
+                            //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
+                            //             // await firebase.messaging().registerDeviceForRemoteMessages()
+                            //             messaging().getToken()
+                            //             .then( token => {
+                            //                 console.log("Messaging Token: ", token);
+                            //             }).catch( error => {
+                            //                 console.log("Error: " , error);
+                            //             });
+                            //         // }
+                            //     })
+                            //     .catch ( error => {
+                            //         console.error(error);
+                            //     });
+                            // }
+                        })
+
                         axios.post('https://senior-video-call.herokuapp.com/remote-message', {
                             messageTitle: "Call de André",
                             messageBody: "André vous appelle...",
@@ -275,6 +331,58 @@ export default function ContactsPage(props) {
                         onPress={() => {
                             handleVideoCall();
                             // props.navigation.navigate('Video');
+                            messaging().hasPermission().then( enabled => {
+                                console.warn(enabled);
+                                if (enabled) {
+                                    console.warn('true')
+                                    // messaging().registerDeviceForRemoteMessages( remoteMessage => {
+                                    //     console.warn('register')
+                                    // })
+                                    messaging().getToken()
+                                    .then( token => {
+                                        console.warn("TOKEN: ", token);
+                                        // Alert.alert(token)
+                                        // setFBToken(token);
+                                    })
+                                    .catch( error => {
+                                        console.error(error)
+                                    }); 
+                                    
+                                    messaging().onTokenRefresh( token => {
+                                        console.log("Refreshed Token: ", token);
+                                    });
+                    
+                                    // if (role === "senior"){
+                                    //     var TOPIC = `Senior-${user.user_id}`;
+                                    // } else {
+                                        var TOPIC = `Famille-${senior.id}`;
+                                    // }
+                                    
+                                    messaging()
+                                    .subscribeToTopic(TOPIC)
+                                    .then(() => {
+                                        console.warn(`Topic: ${TOPIC} Suscribed`);
+                                    });
+                                } else {
+                                    // console.warn('false')
+                                    messaging().requestPermission()
+                                    .then( async authStatus => {
+                                        console.warn("APNs Status: ", authStatus);
+                                        // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
+                                            // await firebase.messaging().registerDeviceForRemoteMessages()
+                                            messaging().getToken()
+                                            .then( token => {
+                                                console.log("Messaging Token: ", token);
+                                            }).catch( error => {
+                                                console.log("Error: " , error);
+                                            });
+                                        // }
+                                    })
+                                    .catch ( error => {
+                                        console.error(error);
+                                    });
+                                }
+                            })
                             _checkPermissions(() => {
                                 let room = `${senior.prenom}${user.user_name}ROOM`;
                                 // console.warn(room)

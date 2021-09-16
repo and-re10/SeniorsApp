@@ -4,6 +4,10 @@ import { View, Text, TouchableOpacity, Dimensions, Image } from 'react-native'
 import { io } from "socket.io-client";
 import axios from "axios";
 
+// Notifications Firebase
+// import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
+
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT_MODAL = 150;
 
@@ -87,6 +91,58 @@ export default function CallFamillyModal(props) {
                         // stopSound()
                         handleVideoCall();
                         // console.warn(props.senior_name)
+
+                        messaging().hasPermission().then( async enabled => {
+                            console.warn(enabled);
+                            // if (enabled) {
+                                // console.warn('true')
+                                await messaging().registerDeviceForRemoteMessages()
+                                messaging().getToken()
+                                .then( token => {
+                                    console.warn("TOKEN: ", token);
+                                    // Alert.alert(token)
+                                    // setFBToken(token);
+                                })
+                                .catch( error => {
+                                    console.error(error)
+                                }); 
+                                
+                                messaging().onTokenRefresh( token => {
+                                    console.log("Refreshed Token: ", token);
+                                });
+                
+                                // if (role === "senior"){
+                                //     var TOPIC = `Senior-${user.user_id}`;
+                                // } else {
+                                    var TOPIC = `Famille-${props.fam_id}${props.senior_id}`;
+                                // }
+                                
+                                messaging()
+                                .subscribeToTopic(TOPIC)
+                                .then(() => {
+                                    console.warn(`Topic: ${TOPIC} Suscribed`);
+                                });
+                            // } else {
+                            //     // console.warn('false')
+                            //     messaging().requestPermission()
+                            //     .then( async authStatus => {
+                            //         console.warn("APNs Status: ", authStatus);
+                            //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
+                            //             // await firebase.messaging().registerDeviceForRemoteMessages()
+                            //             messaging().getToken()
+                            //             .then( token => {
+                            //                 console.log("Messaging Token: ", token);
+                            //             }).catch( error => {
+                            //                 console.log("Error: " , error);
+                            //             });
+                            //         // }
+                            //     })
+                            //     .catch ( error => {
+                            //         console.error(error);
+                            //     });
+                            // }
+                        })
+
                         props._checkPermissions(() => {
                             let room = `${props.senior_name}${props.fam_name}ROOM`
                             // console.warn(room)
@@ -99,7 +155,7 @@ export default function CallFamillyModal(props) {
                                             messageTitle: "Call de André",
                                             messageBody: "André vous appelle...",
                                             messageUser: "andre",
-                                            firebaseTopic: `Famille-${props.fam_id}`,
+                                            firebaseTopic: `Famille-${props.fam_id}${props.senior_id}`,
                                     }).then(response => {
                                         // console.warn("response: " + response);
                                     }).catch(error => {

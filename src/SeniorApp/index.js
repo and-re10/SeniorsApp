@@ -24,7 +24,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 
 // Firebase Push Notifications
 // import firebase from "react-native-firebase";
-// import firebase from '@react-native-firebase/app';
+// // import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
@@ -248,8 +248,12 @@ export default function SeniorPage({ navigation }) {
 //   const messaging = firebase.messaging();
 
     useEffect(() => {
-        messaging().hasPermission().then( enabled => {
-            if (enabled) {
+        messaging().hasPermission().then( async enabled => {
+            // if (enabled) {
+                await messaging().registerDeviceForRemoteMessages()
+                // messaging().registerDeviceForRemoteMessages( remoteMessage => {
+                //     console.warn('register')
+                // })
                 messaging().getToken()
                 .then( token => {
                     console.log("TOKEN: ", token);
@@ -264,21 +268,21 @@ export default function SeniorPage({ navigation }) {
                     console.log("Refreshed Token: ", token);
                 });
 
-                // testNotif = messaging.onMessage( async remoteMessage => {
-                //     if (AppState.currentState === "active") {
-                //         console.log('A new message arrived!', remoteMessage.data);
-                //         // Push notification IOS
-                //         PushNotificationIOS.presentLocalNotification({
-                //             alertTitle: remoteMessage.data.title,
-                //             alertBody: remoteMessage.data.body,
-                //             isSilent: true,
-                //             // soundName: "zak_music.mp3",
-                //         });
-                //         // End Push Notification IOS
-                //         // Linking.openURL("seniorsApp://app")
-                //         // stopSound
-                //     }
-                // })
+                testNotif = messaging.onMessage( async remoteMessage => {
+                    // if (AppState.currentState === "active") {
+                        console.warn('A new message arrived!', remoteMessage.data);
+                        // Push notification IOS
+                        PushNotificationIOS.presentLocalNotification({
+                            alertTitle: remoteMessage.data.title,
+                            alertBody: remoteMessage.data.body,
+                            isSilent: true,
+                            // soundName: "zak_music.mp3",
+                        });
+                        // End Push Notification IOS
+                        // Linking.openURL("seniorsApp://app")
+                        // stopSound
+                    // }
+                })
                 // console.warn(role);
 
                 // if (role === "senior"){
@@ -290,27 +294,28 @@ export default function SeniorPage({ navigation }) {
                 messaging()
                 .subscribeToTopic(TOPIC)
                 .then(() => {
-                    console.log(`Topic: ${TOPIC} Suscribed`);
+                    console.warn(`Topic: ${TOPIC} Suscribed`);
+                    // Senior
                 });
-            } else {
+            // } else {
 
-                messaging().requestPermission()
-                .then( async authStatus => {
-                    console.log("APNs Status: ", authStatus);
-                    // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
-                        // await firebase.messaging().registerDeviceForRemoteMessages()
-                        messaging().getToken()
-                        .then( token => {
-                            console.log("Messaging Token: ", token);
-                        }).catch( error => {
-                            console.log("Error: " , error);
-                        });
-                    // }
-                })
-                .catch ( error => {
-                    console.error(error);
-                });
-            }
+            //     messaging().requestPermission()
+            //     .then( async authStatus => {
+            //         console.log("APNs Status: ", authStatus);
+            //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
+            //             // await firebase.messaging().registerDeviceForRemoteMessages()
+            //             messaging().getToken()
+            //             .then( token => {
+            //                 console.log("Messaging Token: ", token);
+            //             }).catch( error => {
+            //                 console.log("Error: " , error);
+            //             });
+            //         // }
+            //     })
+            //     .catch ( error => {
+            //         console.error(error);
+            //     });
+            // }
         })
     }, []);
 
@@ -504,7 +509,7 @@ export default function SeniorPage({ navigation }) {
             }
             {
                 famillyCallData ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isCallFamillyModalVisible} nRequestClose={() => changeCallFamillyModalVisible(false)}>
-                    <CallFamillyModal  changeModalVisible={changeCallFamillyModalVisible} fam_id={famillyCallData?.id}  fam_name={famillyCallData?.userName} senior_name={user?.user_name}  image_senior={famillyCallData?.photo} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation} senior_code={user?.senior_code} socket={socket}/>
+                    <CallFamillyModal  changeModalVisible={changeCallFamillyModalVisible} fam_id={famillyCallData?.id}  fam_name={famillyCallData?.userName} senior_name={user?.user_name}  image_senior={famillyCallData?.photo} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation} senior_code={user?.senior_code} socket={socket} senior_id={user.user_id}/>
                 </Modal> : <View></View> 
             }
             

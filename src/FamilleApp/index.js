@@ -28,7 +28,7 @@ import MonComptePage from "./Pages/MonComptePage/index";
 
 // Firebase Push Notifications
 // import firebase from "react-native-firebase";
-import firebase from '@react-native-firebase/app';
+// import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
@@ -164,19 +164,22 @@ export default function FamillePage({ navigation }) {
     var testNotif = null;
     // const messaging = firebase.messaging();
 
+    const [ stopNotif, setStopNotif ] = useState(false);
+    const [ timerNotif, setTimerNotif ] = useState(15);
+
     useEffect(() => {
         // console.warn(WIDTH)
         // console.warn('test')
-        messaging().hasPermission().then( enabled => {
-            console.warn(enabled);
-            if (enabled) {
-                console.warn('true')
-                messaging().registerDeviceForRemoteMessages( remoteMessage => {
-                    console.warn('register')
-                })
+        messaging().requestPermission();
+        messaging().hasPermission().then( async  enabled => {
+            // console.warn(enabled);
+            // if (enabled) {
+                // console.warn('true')
+                await messaging().registerDeviceForRemoteMessages()
+
                 messaging().getToken()
                 .then( token => {
-                    console.log("TOKEN: ", token);
+                    console.warn("TOKEN: ", token);
                     // Alert.alert(token)
                     // setFBToken(token);
                 })
@@ -192,14 +195,14 @@ export default function FamillePage({ navigation }) {
                     // if (AppState.currentState === "active") {
                         console.warn('A new message arrived!', remoteMessage.data);
                         // Push notification IOS
-                        PushNotificationIOS.presentLocalNotification({
-                            alertTitle: remoteMessage.data.title,
-                            alertBody: remoteMessage.data.body,
-                            isSilent: true,
-                            // soundName: "zak_music.mp3",
-                        });
-                        console.warn('onMessage');
-                        Linking.openURL("seniorsApp://")
+                        // PushNotificationIOS.presentLocalNotification({
+                        //     alertTitle: remoteMessage.data.title,
+                        //     alertBody: remoteMessage.data.body,
+                        //     isSilent: true,
+                        //     // soundName: "zak_music.mp3",
+                        // });
+                        // console.warn('onMessage');
+                        // Linking.openURL("seniorsApp://")
                         // End Push Notification IOS
                         // Linking.openURL("seniorsApp://app")
                         // stopSound
@@ -214,60 +217,106 @@ export default function FamillePage({ navigation }) {
                 // });
 
                 messaging().onNotificationOpenedApp(remoteMessage => {
+                    setStopNotif(true);
+                    console.warn(stopNotif);
                     // PushNotificationIOS.presentLocalNotification({
                     //         alertTitle: remoteMessage.data.title,
                     //         alertBody: remoteMessage.data.body,
                     //         isSilent: true,
                     //         // soundName: "zak_music.mp3",
                     //     });
-                    // Linking.openURL("seniorsApp://");
-                    console.log("onNotificationOpenedApp");
-                })
+                    // // Linking.openURL("seniorsApp://");
+                    // console.log("onNotificationOpenedApp");
+                });
 
                 messaging().getInitialNotification( remoteMessage => {
-                    // PushNotificationIOS.presentLocalNotification({
-                    //     alertTitle: remoteMessage.data.title,
-                    //     alertBody: remoteMessage.data.body,
-                    //     isSilent: true,
-                    //     // soundName: "zak_music.mp3",
-                    // });
+                    // notificationTimer(remoteMessage);
+                    // setStopNotif(true);
+                    // console.warn(stopNotif);
+                    PushNotificationIOS.presentLocalNotification({
+                        alertTitle: remoteMessage.data.title,
+                        alertBody: remoteMessage.data.body,
+                        isSilent: true,
+                        // soundName: "zak_music.mp3",
+                    });
                     // Linking.openURL("seniorsApp://");
-                    console.log("getInitialNotification");
-                })
+                    // console.log("getInitialNotification");
+                });
                 // console.warn(role);
 
                 // if (role === "senior"){
                 //     var TOPIC = `Senior-${user.user_id}`;
                 // } else {
-                    var TOPIC = `Famille-${user.user_id}`;
+                    var TOPIC = `Famille-${user.user_id}${user.senior_id}`;
                 // }
                 
                 messaging()
                 .subscribeToTopic(TOPIC)
                 .then(() => {
                     console.warn(`Topic: ${TOPIC} Suscribed`);
+                    // Famille
                 });
-            } else {
-                // console.warn('false')
-                messaging().requestPermission()
-                .then( async authStatus => {
-                    console.warn("APNs Status: ", authStatus);
-                    // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
-                        // await firebase.messaging().registerDeviceForRemoteMessages()
-                        messaging().getToken()
-                        .then( token => {
-                            console.log("Messaging Token: ", token);
-                        }).catch( error => {
-                            console.log("Error: " , error);
-                        });
-                    // }
-                })
-                .catch ( error => {
-                    console.error(error);
-                });
-            }
+            // } else {
+            //     // console.warn('false')
+            //     messaging().requestPermission()
+            //     .then( async authStatus => {
+            //         console.warn("APNs Status: ", authStatus);
+            //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
+            //             // await firebase.messaging().registerDeviceForRemoteMessages()
+            //             messaging().getToken()
+            //             .then( token => {
+            //                 console.log("Messaging Token: ", token);
+            //             }).catch( error => {
+            //                 console.log("Error: " , error);
+            //             });
+            //         // }
+            //     })
+            //     .catch ( error => {
+            //         console.error(error);
+            //     });
+            // }
         })
     }, []);
+
+    const notificationTimer = (remoteM) => {
+        // let compt = 0;
+        // let tempoNotif = setInteval( () => {
+
+        //     PushNotificationIOS.presentLocalNotification({
+        //         alertTitle: remoteM.data.title,
+        //         alertBody: remoteM.data.body,
+        //         // isSilent: false,
+        //         soundName: "zak_music.mp3",
+        //         repeats: true,
+        //         // reply_placeholder_text: "Write your response...", // (required)
+        //         // reply_button_text: "Reply" // (required)
+        //     });
+        //     if ( compt === 4 ){
+        //         clearInterval(tempoNotif);
+        //     };
+
+        // }, 500 );
+
+
+        // setInterval( () => {
+        //     setTimerNotif(timerNotif - 1);
+
+        //     PushNotificationIOS.presentLocalNotification({
+        //         alertTitle: remoteM.data.title,
+        //         alertBody: remoteM.data.body,
+        //         // isSilent: false,
+        //         soundName: "zak_music.mp3",
+        //         reply_placeholder_text: "Write your response...", // (required)
+        //         reply_button_text: "Reply" // (required)
+        //     });
+
+        // }, 2000);
+
+        // if (timerNotif === 0 || stopNotif === true) {
+        //     clearInterval()
+        // }
+
+    }
 
     // End Push Notidfication
     // useEffect(() => {

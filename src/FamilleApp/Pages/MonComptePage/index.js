@@ -138,7 +138,7 @@ export default function MonComptePage(props) {
     const formik = useFormik({
         initialValues: { title: '' },
         onSubmit: values => {
-          RNFetchBlob.fetch('POST', `http://192.168.0.156:8000/update-famille-photo/16`,{
+          RNFetchBlob.fetch('POST', `https://test.tabtab.eu/update-famille-photo/${user.user_id}`,{
             
             'Content-Type' : 'multipart/form-data',
           }, 
@@ -240,7 +240,7 @@ export default function MonComptePage(props) {
             {/* <Text>Mon Compte Page</Text> */}
             {/* Image */}
             {/* https://test.tabtab.eu/storage/images/${myUser?.photo_profil} */}
-            { imagePath ? <Image source={{uri: imagePath}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} /> : <Image source={{uri: `http://192.168.0.156:8000/storage/images/F3F96E3E-75BD-4071-B641-C1536D57CC77.jpg`}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} />
+            { imagePath ? <Image source={{uri: imagePath}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} /> : <Image source={{uri: `https://test.tabtab.eu/storage/images/${myUser?.photo_profil}`}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} />
             }
             {/* <Image source={{uri: `http://192.168.0.156:8000/storage/images/${myUser?.photo_profil}`}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} /> */}
             
