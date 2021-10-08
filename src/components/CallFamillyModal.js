@@ -11,6 +11,8 @@ import messaging from '@react-native-firebase/messaging';
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT_MODAL = 150;
 
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 
 export default function CallFamillyModal(props) {
 
@@ -79,14 +81,14 @@ export default function CallFamillyModal(props) {
         
         <TouchableOpacity disabled={false} style={{flex: 1, alignItems: "center", justifyContent: "center"}} onPress={() => closeModal(false)}> 
         {/* Modifications sur le touchable Opacity*/}
-            <View style={{height: 260, width: "90%", paddingTop: 10, backgroundColor: 'white', borderRadius: 10, justifyContent: "space-around"}}>
-                <View style={{flex: 1, alignItems: "center", marginBottom: 20}}>
-                    <Text style={{marginHorizontal: 5, marginTop: 10, marginBottom: 20, fontWeight: "bold"}}>Appeler {props.role === "senior" ? props.senior_name : props.fam_name}</Text>
-                    <Image source={{uri: `https://test.tabtab.eu/storage/images/${props.image_senior}`}}
-                    style={{height: 140, width: 140, borderRadius: 100}} />
+            <View  style={{flex: 1, height: "100%", width: "100%", backgroundColor: 'rgba(255, 255, 255, .5)', position: "relative", justifyContent: "center", alignItems: "center"}}>
+                <View style={{alignItems: "center"}}>
+                    {/* <Text style={{marginHorizontal: 5, marginTop: 10, marginBottom: 20, fontWeight: "bold"}}>Appeler {props.role === "senior" ? props.senior_name : props.fam_name}</Text> */}
+                    <Image source={{uri: `https://test.tabtab.eu/storage/images/${props.fam_image}`}}
+                    style={{height: 400, width: 400, borderRadius: 400}} />
                 </View>
-                <View style={{width: "100%", flexDirection: "row", justifyContent: "space-around"}}>
-                    <TouchableOpacity style={{marginVertical: 10, backgroundColor: "green", borderRadius: 10, justifyContent: "center", alignItems: "center", width: "40%"}} onPress={() => {
+                <View style={{width: "70%", flexDirection: "row", justifyContent: "space-around", position: "absolute", bottom: "15%"}}>
+                    <TouchableOpacity style={{ width: "100%", paddingVertical: 20, backgroundColor: "green", flexDirection: "row", borderRadius: 10, justifyContent: "center", alignItems: "center", zIndex: 5}} onPress={() => {
                         closeModal(false);
                         // stopSound()
                         handleVideoCall();
@@ -181,7 +183,8 @@ export default function CallFamillyModal(props) {
                             });
                         });
                     }}>
-                        <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 20}}>APPELER</Text>
+                        <MaterialIcons name="videocam" size={60} color="white"/>
+                        <Text style={{color: "white", fontWeight: "bold", fontSize: 40}}> Appeler {props.role === "senior" ? props.senior_name : props.fam_name} ?</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={{marginVertical: 10, backgroundColor: "red", borderRadius: 10, justifyContent: "center", alignItems: "center", width: "40%"}} onPress={() => {
                         handleVideoCall()

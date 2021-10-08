@@ -4,7 +4,7 @@ import seniorsApi from "../../../api/app";
 import AuthContext from "../../../contexts/auth";
 import SeniorAppRoutes from '../../../Routes/seniorApp.routes';
 import SimpleModal from "../../../components/SimpleModal";
-import VideoCallModal from "../../../components/VideoCallModal";
+import VideoCallModal from "../../../components/SeniorVideoCallModal";
 import { io } from "socket.io-client";
 import {
     checkMultiple,
@@ -28,6 +28,7 @@ export default function ContactsPage(props) {
 
     const [ senior, setSenior ] = useState([]);
     const [ famille, setFamille ] = useState([]);
+    const [ myUser, setMyUser ] = useState([]);
     const { user, callData, setCallData, role } = useContext(AuthContext);
 
     const [ isModalVisible, setIsModalVisible ] = useState(false);
@@ -151,9 +152,13 @@ export default function ContactsPage(props) {
     
 
     useEffect(() => {
+        seniorsApi.get(`/get-famille/${user.user_id}`).then( response => {
+            console.warn(response.data)
+            setMyUser(response.data);
+        });
         // Get senior data
         seniorsApi.get(`/get-senior/${user.senior_id}`).then( response => {
-            // console.warn(response.data)
+            console.warn(response.data)
             setSenior(response.data);
         });
 
@@ -216,7 +221,7 @@ export default function ContactsPage(props) {
             username: user.user_name,
             to: "senior",
             senior_code: senior.code,
-            user_img: user.user_img
+            user_img: myUser.photo_profil
         }
         socket.emit('videoCall', content);
         // send notification
@@ -234,7 +239,7 @@ export default function ContactsPage(props) {
         <View style={{height: "78%", display: props.display, alignItems: "center"}}>
             <ScrollView contentContainerStyle={{ alignItems: "center"}} style={{ flex: 1, marginBottom: 20, width: "100%" }} showsVerticalScrollIndicator={false}>
             <Modal transparent={true} animationType='fade' visible={isModalVisible} nRequestClose={() => changeModalVisible(false)}>
-                <SimpleModal changeModalVisible={changeModalVisible} setData={setData} socket={socket} username={user.user_name} senior_name={senior.prenom} code={senior.code}/>
+                <SimpleModal changeModalVisible={changeModalVisible} fam_image={myUser.photo_profil} setData={setData} socket={socket} username={user.user_name} senior_name={senior.prenom} code={senior.code}/>
             </Modal>
             {/* {
                 videoCall ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isVideoCallModalVisible} nRequestClose={() => changeVideoCallModalVisible(false)}>

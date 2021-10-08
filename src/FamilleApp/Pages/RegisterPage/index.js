@@ -113,7 +113,7 @@ export default function RegisterFamille({ navigation }) {
     const formik = useFormik({
         initialValues: { title: '' },
         onSubmit: values => {
-          RNFetchBlob.fetch('POST', `http://192.168.0.156:8000/api/register-famille`,{
+          RNFetchBlob.fetch('POST', `https://test.tabtab.eu/api/register-famille`,{
             
             'Content-Type' : 'multipart/form-data',
           }, 
@@ -151,7 +151,7 @@ export default function RegisterFamille({ navigation }) {
             
           ]).then((resp) => {
            Alert.alert("Upload success!");
-            // console.warn(resp);
+            console.warn(resp);
           }).catch((err) => {
             Alert.alert('An error occurred!', err.message, [{ text: 'Okay' }]);
           })

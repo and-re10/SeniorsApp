@@ -28,19 +28,54 @@ export default function Flux(props) {
     //     });
     // }, []);
 
+    const getSenior = async (usr) => {
+        try {
+            console.warn(usr.senior_id);
+            const response = await seniorsApi.get(`get-senior/${usr.senior_id}`)
+            console.warn(response.data.maison_repo_id);
+            getMaisonRepo(response.data.maison_repo_id);
+            getPosts(response.data.maison_repo_id);
+        } catch (error) {
+            console.warn(error);
+        }
+    } 
+
+    const getMaisonRepo = async (resp) => {
+        try {
+            const response = await seniorsApi.get(`get-maison-repo/${resp}`)
+            console.warn(response.data);
+            setMaisonRepo(response.data);
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
+    const getPosts = async (resp) => {
+        try {
+            const response = await seniorsApi.get(`get-posts/${resp}`);
+            setPosts(response.data);
+            console.warn(response.data);
+        } catch (error) {
+            console.warn(error);
+        }
+    }
+
     useEffect(() => {
         // get maison de repo data
-        seniorsApi.get(`/get-senior/${user.senior_id}`).then(response => {
-            // console.warn(response.data.maison_repo_id)
-            seniorsApi.get(`/get-maison-repo/${response.data.maison_repo_id}`).then(response => {
-                // console.warn(response.data);
-                setMaisonRepo(response.data);
-            });
-            // console.warn(response.data.maison_repo_id)
-            seniorsApi.get(`/get-posts/${response.data.maison_repo_id}`).then(response => {
-                setPosts(response.data);
-            })
-        })
+        getSenior(user);
+        // seniorsApi.get(`get-senior/${user.senior_id}`).then(response => {
+        //     console.warn(response.data.maison_repo_id)
+        //     getSenior(response)
+        //     // seniorsApi.get(`/get-maison-repo/${response.data.maison_repo_id}`).then(response => {
+        //     //     console.warn(response.data);
+        //     //     setMaisonRepo(response.data);
+        //     // });
+        //     // console.warn(response.data.maison_repo_id)
+        //     // seniorsApi.get(`/get-posts/${response.data.maison_repo_id}`).then(response => {
+        //     //     setPosts(response.data);
+        //     //     console.warn(response.data);
+        //     // })
+        // })
         
     }, []);
     // function createPost(nb){
@@ -74,7 +109,7 @@ export default function Flux(props) {
                             </View>
                             <Text style={{marginHorizontal: 10}}>{post.description}</Text>
 
-                            <Image source={{uri: `https://test.tabtab.eu/storage/images/${maisonRepo?.photo_profil}`}}
+                            <Image source={{uri: `https://test.tabtab.eu/storage/public/images/${post.image}`}}
                             style={{width: "100%", height: 300, marginTop: 20, justifyContent: "center", alignItems: "center"}} />
                             {/* <View style={{width: "100%", height: 300, backgroundColor: "orange", marginTop: 20, justifyContent: "center", alignItems: "center"}}>
                                 <Text style={{fontSize: 50}}>IMG</Text>

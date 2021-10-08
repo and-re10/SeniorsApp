@@ -138,7 +138,7 @@ export default function MonComptePage(props) {
     const formik = useFormik({
         initialValues: { title: '' },
         onSubmit: values => {
-          RNFetchBlob.fetch('POST', `https://test.tabtab.eu/update-famille-photo/${user.user_id}`,{
+          RNFetchBlob.fetch('POST', `https://test.tabtab.eu/api/update-famille-photo/${user.user_id}`,{
             
             'Content-Type' : 'multipart/form-data',
           }, 
@@ -309,8 +309,8 @@ export default function MonComptePage(props) {
             {/* <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={formik.handleSubmit}>
                 <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>update Photo</Text>
             </TouchableOpacity> */}
-            <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={() => {
-                Linking.openURL("seniorsApp://");
+            {/* <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={() => {
+                Linking.openURL("seniorsApp://"); 
                 // console.warn(AppState.currentState)
                 // https://www.google.com
                 // const url = 'seniorsApp://';
@@ -342,7 +342,7 @@ export default function MonComptePage(props) {
                 // remoteMessagefunction()
             }}>
                 <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>Linking URL: </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             
             
             {/* Nom du Senior */}

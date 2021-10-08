@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Dimensions, Image } from 'react-native'
 import Sound from 'react-native-sound';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT_MODAL = 150;
 
 
-export default function VideoCallModal(props) {
+export default function FamilleVideoCallModal(props) {
 
     
     useEffect(() => {
+        // console.warn(props.senior_name);
         Sound.setCategory('Playback');
-        mySound = new Sound('zak_music.mp3',Sound.MAIN_BUNDLE,(error)=>{
+        mySound = new Sound('TELEPHONE-ROTARY_GEN-HDF-23047.wav',Sound.MAIN_BUNDLE,(error)=>{
             if(error){
                 console.log('Error loading sound: ' + error);
                 return;
@@ -41,17 +43,27 @@ export default function VideoCallModal(props) {
 
 
     return (
-        <TouchableOpacity disabled={true} style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
-            <View style={{height: 260, width: "90%", paddingTop: 10, backgroundColor: 'white', borderRadius: 10, justifyContent: "space-around"}}>
-                <View style={{flex: 1, alignItems: "center", marginBottom: 20}}>
-                    <Text style={{marginHorizontal: 5, marginTop: 10, marginBottom: 20, fontWeight: "bold"}}> { props.fam_name} vous appelle</Text>
-                    <Image source={{uri: `https://test.tabtab.eu/storage/images/${props.image_senior}`}}
-                    style={{height: 140, width: 140, borderRadius: 100}} />
+        <TouchableOpacity disabled={true} style={{flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
+            <View style={{height: "100%", width: "100%", paddingTop: 10, borderRadius: 10, justifyContent: "space-around", alignItems: "center", position: "relative"}}>
+                <View style={{}}>
+                    {/* <Text style={{marginHorizontal: 5, marginTop: 10, marginBottom: 20, fontWeight: "bold"}}> { props.fam_name} vous appelle</Text> */}
+                    
+                    {/* <MaterialIcons name="notifications" size={100} color="#ec611d" style={{position: "absolute", top: "-4%", right: "4%", zIndex: 4, transform: [{rotate: "20deg"}]}}/> */}
+                    <Image source={{uri: `https://test.tabtab.eu/storage/images/${props.user_image}`}}
+                    style={{height: 200, width: 200, borderRadius: 200, marginBottom: 100}} />
+                    {/* <View style={{height: 200, width: 200, borderRadius: 200, backgroundColor: "black", marginBottom: 100}} ></View> */}
+                    <Text style={{color: "white", fontSize: 20, fontWeight: "bold"}}>{props.senior_name} vous appelle ...</Text>
                 </View>
                 <View style={{width: "100%", flexDirection: "row", justifyContent: "space-around"}}>
-                    <TouchableOpacity style={{marginVertical: 10, backgroundColor: "green", borderRadius: 10, justifyContent: "center", alignItems: "center", width: "40%"}} onPress={() => {
-                        closeModal(false);
+                    <TouchableOpacity style={{backgroundColor: "red", borderRadius: 80, marginRight: 15, justifyContent: "center", alignItems: "center", width: 80, height: 80}} onPress={() => {
                         stopSound()
+                        closeModal(false)
+                    }}>
+                        <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 40}}><MaterialIcons name="call-end" size={38} color="#ffffff"/></Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor: "green", borderRadius: 80, justifyContent: "center", alignItems: "center", width: 80, height: 80}} onPress={() => {
+                        stopSound()
+                        closeModal(false);
                         // console.warn(props.senior_name)
                         props._checkPermissions(() => {
                             let room = `${props.senior_name}${props.fam_name}ROOM`
@@ -81,14 +93,11 @@ export default function VideoCallModal(props) {
                             });
                         });
                     }}>
-                        <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 20}}>OUI</Text>
+                        <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 40}}>
+                            <MaterialIcons name="call" size={38} color="#ffffff"/>
+                        </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{marginVertical: 10, backgroundColor: "red", borderRadius: 10, justifyContent: "center", alignItems: "center", width: "40%"}} onPress={() => {
-                        closeModal(false)
-                        stopSound()
-                    }}>
-                        <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 20}}>NON</Text>
-                    </TouchableOpacity>
+                    
                 </View>
             </View>
             

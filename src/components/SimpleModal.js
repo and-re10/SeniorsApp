@@ -16,7 +16,8 @@ export default function SimpleModal(props) {
             let content = {
                 msg: message,
                 username: props.username,
-                senior_code: props.code
+                senior_code: props.code,
+                photo: props.fam_image
             }
             props.socket.emit('hello', content);
             // console.warn(props.username)

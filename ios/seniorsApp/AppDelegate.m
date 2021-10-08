@@ -68,9 +68,10 @@ static void InitializeFlipper(UIApplication *application) {
   // Define UNUserNotificationCenter
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
-
-  return YES;
   // End Push Notifications IOS
+  
+  return YES;
+  
 }
 
 // Push Notifications IOS

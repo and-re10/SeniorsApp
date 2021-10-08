@@ -3,8 +3,8 @@ import { Dimensions, Text, TouchableOpacity, View, Button, Image, Modal, Refresh
 import AuthContext from "../contexts/auth";
 import seniorsApi from "../api/app";
 import { io } from "socket.io-client";
-import SimpleModal from "../components/SeniorModal";
-import VideoCallModal from "../components/VideoCallModal";
+import SeniorNotifModal from "../components/SeniorNotifModal";
+import SeniorVideoCallModal from "../components/SeniorVideoCallModal";
 import CallFamillyModal from "../components/CallFamillyModal";
 import getCurrentWeather from "../api/weatherApi";
 // import axios from 'axios';
@@ -21,12 +21,16 @@ import {
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // Firebase Push Notifications
 // import firebase from "react-native-firebase";
 // // import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
+
+import {Container} from "./style";
+import LinearGradient from 'react-native-linear-gradient';
 
 // import AuthContext from "../contexts/auth";
 
@@ -73,6 +77,12 @@ export default function SeniorPage({ navigation }) {
     const [ currentDate, setCurrentDate ] = useState("");
     const [ currentHour, setCurrentHour ] = useState("");
     const [ weatherDescription, setWeatherDescription ] = useState("");
+
+    // Get dateActuelle
+    // const [ dateActuel, setDateActuel ] = useState('');
+
+    // Menus
+    const [ updateMenu, setUpdateMenu ] = useState("dejeuner");
 
     // Refreching
     // const [ refreshing, setRefreshing ] = useState(false)
@@ -183,12 +193,14 @@ export default function SeniorPage({ navigation }) {
 
     function getCurrentHour(){
         let date = new Date();
+        
         // console.warn(date.getHours() + ":" + date.getMinutes())
         setCurrentHour(date.getHours() + ":" + ('0' + date.getMinutes()).slice(-2))
     }
     
     useEffect(() => {
         getCurrentDate();
+        getCurrentHour()
         let secTimer = setInterval( () => {
             getCurrentHour()
         },1000)
@@ -223,18 +235,22 @@ export default function SeniorPage({ navigation }) {
     const [ maisonRepo, setMaisonRepo ] = useState([]);
     const [ menus, setMenus ] = useState([]);
 
+
     useEffect(() => {
+        
         console.log(user.user_id);
         seniorsApi.get(`/get-senior/${user.user_id}`).then(response => {
-            console.warn(response.data.maison_repo_id)
+            console.log(`Senior${response.data.nom}`);
+            console.warn(response.data.maison_repo_id);
             seniorsApi.get(`/get-maison-repo/${response.data.maison_repo_id}`).then(response => {
-                // console.warn(response.data);
+                console.warn(response.data);
                 setMaisonRepo(response.data);
             });
             // console.warn(response.data.maison_repo_id)
             seniorsApi.get(`/get-menus/${response.data.maison_repo_id}`).then(response => {
                 setMenus(response.data);
-                console.warn(response.data)
+                console.warn(`Menus: ${response.data[0].date}`);
+                updateDate();
             })
         })
     }, []);
@@ -320,8 +336,18 @@ export default function SeniorPage({ navigation }) {
     }, []);
 
     useEffect(() => {
-        _checkPermissions();
         setCurrentWeather();
+        let hourTimer = setInterval( () => {
+            setCurrentWeather();
+        },(1000*60)*60)
+      
+        return () => clearInterval(hourTimer);
+
+    }, []);
+
+    useEffect(() => {
+        _checkPermissions();
+        
         // console.warn(AppState.currentState);
         // messaging.hasPermission().then( enabled => {
         //     if (enabled) {
@@ -393,6 +419,7 @@ export default function SeniorPage({ navigation }) {
     // }, []);
 
     useEffect(() => {
+        console.warn(user?.user_img)
         // Get senior data
         seniorsApi.get(`/get-senior-famille/${user.user_id}`).then( response => {
             // console.warn(response.data)
@@ -404,7 +431,7 @@ export default function SeniorPage({ navigation }) {
             if (msg.senior_code === user.senior_code){
                 // console.warn(msg.senior_code, user.senior_code)
                 setMessages(msg);
-                // console.warn(msg);
+                console.warn(msg);
                 setIsModalVisible(true);
             }
             
@@ -413,6 +440,7 @@ export default function SeniorPage({ navigation }) {
             if (data.senior_code === user?.senior_code && data?.to === "senior"){
                 // console.warn(data.senior_code, user.senior_code, data.user_img)
                 setVideoCall(data);
+                console.warn(data);
                 // console.warn(msg);
                 setIsVideoCallModalVisible(true);
             }
@@ -442,29 +470,33 @@ export default function SeniorPage({ navigation }) {
         // v:clear sky, v:few clouds, v:scattered clouds, v:broken clouds, 	v:shower rain, v:rain, v:thunderstorm, v:snow, v:mist
         switch (description) {
             case "clear sky":
-                return (<IconFeather name="sun" size={38}/>)
+                return (<IconFeather name="sun" size={38} color="#ffffff"/>)
             case "few clouds":
-                return (<Fontisto name="day-cloudy" size={38}/>)
+                return (<Fontisto name="day-cloudy" size={38} color="#ffffff"/>)
             case "scattered clouds":
-                return (<IconFeather name="cloud" size={38}/>)
+                return (<IconFeather name="cloud" size={38} color="#ffffff"/>)
             case "broken clouds":
-                return (<IconFeather name="cloud" size={38}/>)
+                return (<IconFeather name="cloud" size={38} color="#ffffff"/>)
             case "shower rain":
-                return (<IconFeather name="cloud-rain" size={38}/>)
+                return (<IconFeather name="cloud-rain" size={38} color="#ffffff"/>)
             case "snow":
-                return (<IconFeather name="cloud-snow" size={38}/>)
+                return (<IconFeather name="cloud-snow" size={38} color="#ffffff"/>)
+            case "light rain":
+                return (<IconFeather name="cloud-drizzle" size={38} color="#ffffff"/>)
             case "rain":
-                return (<IconFeather name="cloud-drizzle" size={38}/>)
+                return (<IconFeather name="cloud-drizzle" size={38} color="#ffffff"/>)
             case "thunderstorm":
-                return (<IconIonicons name="thunderstorm-outline" size={38}/>)
+                return (<IconIonicons name="thunderstorm-outline" size={38} color="#ffffff"/>)
             case "mist":
-                return (<IconFeather name="wind" size={38}/>)
+                return (<IconFeather name="wind" size={38} color="#ffffff"/>)
             default:
                 return (<Text>Icon non trouvé</Text>)
         }
     }
     
-
+    const changeMenu = () => {
+        setUpdateMenu(updateMenu == "dejeuner" ? "souper" : "dejeuner")
+    }
 
     // const showModal = () => {
     //     messages ? <Modal transparent={true} animationType='fade' visible={isModalVisible} nRequestClose={() => changeModalVisible(false)}>
@@ -499,24 +531,31 @@ export default function SeniorPage({ navigation }) {
                 //     )
                 // })
                 messages ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isModalVisible} nRequestClose={() => changeModalVisible(false)}>
-                    <SimpleModal  changeModalVisible={changeModalVisible} message={messages.message} username={messages.user}/>
+                    <SeniorNotifModal fam_image={messages.photo}  changeModalVisible={changeModalVisible} message={messages.message} username={messages.user}/>
                 </Modal> : <View></View> 
             }
             {
                 videoCall ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isVideoCallModalVisible} nRequestClose={() => changeVideoCallModalVisible(false)}>
-                    <VideoCallModal  changeModalVisible={changeVideoCallModalVisible} role={role}  fam_name={videoCall?.user} senior_name={user.user_name}  image_senior={videoCall?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation}/>
+                    <SeniorVideoCallModal  changeModalVisible={changeVideoCallModalVisible} role={role}  fam_name={videoCall?.user} senior_name={user.user_name}  fam_image={videoCall?.user_img}  image_senior={user?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation}/>
                 </Modal> : <View></View> 
             }
             {
                 famillyCallData ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isCallFamillyModalVisible} nRequestClose={() => changeCallFamillyModalVisible(false)}>
-                    <CallFamillyModal  changeModalVisible={changeCallFamillyModalVisible} fam_id={famillyCallData?.id}  fam_name={famillyCallData?.userName} senior_name={user?.user_name}  image_senior={famillyCallData?.photo} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation} senior_code={user?.senior_code} socket={socket} senior_id={user.user_id}/>
+                    <CallFamillyModal  changeModalVisible={changeCallFamillyModalVisible} fam_id={famillyCallData?.id}  fam_name={famillyCallData?.userName} senior_name={user?.user_name} fam_image={famillyCallData?.photo}  image_senior={user?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation} senior_code={user?.senior_code} socket={socket} senior_id={user.user_id}/>
                 </Modal> : <View></View> 
             }
+
+            {/* <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={true} nRequestClose={() => changeVideoCallModalVisible(false)}>
+                    <VideoCallModal  changeModalVisible={true} role={"senior"}  fam_name={"Carlos"} senior_name={"Andre"}  image_senior={videoCall?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation}/>
+                </Modal> */}
+            {/* <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={true} nRequestClose={() => changeModalVisible(false)}>
+                <SeniorNotifModal fam_image={messages.photo}  changeModalVisible={changeModalVisible} message={messages.message} username={messages.user}/>
+            </Modal> */}
             
-            <View style={{height: "90%", width: "100%", flexDirection: "row"}}>
+            <View style={{height: "100%", width: "100%", flexDirection: "row", backgroundColor: "black"}}>
                 {/* Top */}
                 {/* Left */}
-                <View style={{width: "75%", height: "100%"}}>
+                <View style={{width: "73%", height: "100%"}}>
                     {/* Left Top */}
                     <View  style={{width: "100%", height: "55%", backgroundColor: "black", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around", alignContent: "space-around"}}>
                     
@@ -526,7 +565,8 @@ export default function SeniorPage({ navigation }) {
                                     setFamillyCallData({
                                         userName: elem.prenom,
                                         photo: elem.photo_profil,
-                                        id: elem.id
+                                        id: elem.id,
+                                        // senior_photo: user?.user_img
                                     });
                                     changeCallFamillyModalVisible(true)
                                     // navigation.navigate('Video')
@@ -556,7 +596,7 @@ export default function SeniorPage({ navigation }) {
                                 }}>
                                     <Image source={{uri: `https://test.tabtab.eu/storage/images/${elem?.photo_profil}`}}
                                     style={{height:"100%", width: "100%", borderRadius: 100}} />
-                                    <Text style={{position: "absolute", bottom: 15, width: "100%", textAlign: "center", fontSize: 10, fontWeight: "bold", color: "white"}}>{elem.prenom}</Text>
+                                    <Text style={{position: "absolute", bottom: 15, width: "100%", textAlign: "center", fontSize: 25, fontWeight: "bold", color: "white", backgroundColor: "rgba(0, 0, 0, .4)"}}>{elem.prenom}</Text>
                                 </TouchableOpacity>
                             )
                         })}
@@ -587,51 +627,100 @@ export default function SeniorPage({ navigation }) {
                     </View>
                     {/* Left Bottom */}
                     {menus?.map((menu, index) => {
-                        return (
-                            <View style={{width: "100%", height: "45%", backgroundColor: "white", alignItems: "center"}}>
-                                <View style={{borderBottomWidth: 1, borderBottomColor: "black", height: "15%", paddingHorizontal: 20}}>
-                                    <Text style={{width: "35%", fontSize: 15, textAlign: "center", marginTop: 5}}>Menu du Jour:</Text>
-                                </View>
-                                <View style={{height: "85%", flexDirection: "row"}}>
-                                    <View style={{height: "100%", width: "10%", justifyContent: "center", alignItems: "center"}}>
-                                        <TouchableOpacity style={{backgroundColor: "#f17c21", paddingHorizontal: 10, justifyContent: "center", alignItems: "center"}}> 
-                                            <Text style={{fontSize: 20}}>+</Text> 
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{height: "100%", width: "80%", justifyContent: "space-around", alignItems: "center"}}>
-                                        <Text style={{fontSize: 20}}>{menu.entree_dejeuner}</Text>
-                                        <Text style={{fontSize: 20}}>{menu.plat_dejeuner}</Text>
-                                        <Text style={{fontSize: 20}}>{menu.desser_dejeuner}</Text>
-                                    </View>
-                                    <View style={{height: "100%", width: "10%", justifyContent: "center", alignItems: "center"}}>
-                                        <TouchableOpacity style={{backgroundColor: "#f17c21", paddingHorizontal: 10, justifyContent: "center", alignItems: "center"}}> 
-                                            <Text style={{fontSize: 20}}>+</Text> 
-                                        </TouchableOpacity>
-                                    </View>
+                        var todayDate = new Date().toISOString().slice(0, 10);
+                        // var dd = String(todayDate.getDate().length) < 2 ? `0${todayDate.getDate()}` : `${todayDate.getDate()}`;
+                        // var mm = String(todayDate.getMonth() + 1).length < 2 ? `0${todayDate.getMonth() + 1}` : `${todayDate.getMonth() + 1}`;
+                        // var yyyy = todayDate.getFullYear();
+                        // console.warn(todayDate.getMonth().length)
+                        // let reverseDate = `${dd}-${mm}-${yyyy}`;
+                        
+                        // console.warn(menu.date + "===" + todayDate);
+                        console.warn(menu);
+                        if(menu.date === todayDate){
+                            if(updateMenu == "dejeuner"){
+                                return (
+                                    <View style={{width: "100%", height: "45%", backgroundColor: "white", alignItems: "center"}}>
                                     
-                                </View>
-                            </View>
-                        )}
-                    )}
+                                        <View style={{borderBottomWidth: 1, borderBottomColor: "black", height: "15%", paddingHorizontal: 20}}>
+                                            <Text style={{width: "35%", fontSize: 25, fontWeight: "bold", textAlign: "center", marginTop: 5}}>Menu du Jour: Dejeuner</Text>
+                                        </View>
+                                        <View style={{height: "85%", flexDirection: "row"}}>
+                                            <View style={{height: "100%", width: "10%", justifyContent: "center", alignItems: "center"}}>
+                                                <TouchableOpacity style={{height: "70%" ,paddingHorizontal: 10, justifyContent: "center", alignItems: "center"}} onPress={() => {
+                                                    changeMenu();
+                                                }}> 
+                                                    <Text style={{fontSize: 20}}><FontAwesome name="chevron-left" size={38} color="black"/></Text> 
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{height: "100%", width: "80%", justifyContent: "space-around", alignItems: "center"}}>
+                                                <Text style={{fontSize: 20}}>{menu.entree_dejeuner}</Text>
+                                                <Text style={{fontSize: 20}}>{menu.plat_dejeuner}</Text>
+                                                <Text style={{fontSize: 20}}>{menu.desser_dejeuner}</Text>
+                                            </View>
+                                            <View style={{height: "100%", width: "10%", justifyContent: "center", alignItems: "center"}}>
+                                                <TouchableOpacity style={{height: "70%" ,paddingHorizontal: 10, justifyContent: "center", alignItems: "center"}} onPress={() => {
+                                                    changeMenu();
+                                                }}> 
+                                                    <Text style={{fontSize: 20}}><FontAwesome name="chevron-right" size={38} color="black"/></Text> 
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+    
+                                    </View>
+                                )
+                            } else {
+                                return (
+                                    <View style={{width: "100%", height: "45%", backgroundColor: "white", alignItems: "center"}}>
+                                    
+                                        <View style={{borderBottomWidth: 1, borderBottomColor: "black", height: "15%", paddingHorizontal: 20}}>
+                                            <Text style={{width: "35%", fontSize: 25, fontWeight: "bold", textAlign: "center", marginTop: 5}}>Menu du Jour: Souper</Text>
+                                        </View>
+                                        <View style={{height: "85%", flexDirection: "row"}}>
+                                            <View style={{height: "100%", width: "10%", justifyContent: "center", alignItems: "center"}}>
+                                                <TouchableOpacity style={{height: "70%" ,paddingHorizontal: 10, justifyContent: "center", alignItems: "center"}} onPress={() => {
+                                                    changeMenu();
+                                                }}> 
+                                                    <Text style={{fontSize: 20}}><FontAwesome name="chevron-left" size={38} color="black"/></Text> 
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{height: "100%", width: "80%", justifyContent: "space-around", alignItems: "center"}}>
+                                                <Text style={{fontSize: 20}}>{menu.entree_souper}</Text>
+                                                <Text style={{fontSize: 20}}>{menu.plat_souper}</Text>
+                                                <Text style={{fontSize: 20}}>{menu.desser_souper}</Text>
+                                            </View>
+                                            <View style={{height: "100%", width: "10%", justifyContent: "center", alignItems: "center"}}>
+                                                <TouchableOpacity style={{height: "70%" ,paddingHorizontal: 10, justifyContent: "center", alignItems: "center"}} onPress={() => {
+                                                    changeMenu();
+                                                }}> 
+                                                    <Text style={{fontSize: 20}}><FontAwesome name="chevron-right" size={38} color="black"/></Text> 
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+    
+                                    </View>
+                                )
+                            }
+                        }
+                    })}
                     
                 </View>
                 {/* Right */}
-                <View style={{width: "25%", height: "100%", backgroundColor: "#efefe7"}}>
-                    <Button title="logout" onPress={() => handleSignOut()}/>
-                    <Button title="refresh" onPress={() => setCurrentWeather()}/>
-                    <View style={{height: "33.33%", justifyContent: "center", alignItems: "center"}}>
+                <LinearGradient colors={['#708090', '#000000']} style={{width: "27%", height: "100%", borderTopLeftRadius: 10, borderBottomLeftRadius: 10}}>
+                    
+                    
+                    <View style={{height: "25%", justifyContent: "flex-end", alignItems: "center"}}>
                         {/* Heure */}
-                        <Text style={{fontSize: 90, fontWeight: "bold"}}>{currentHour}</Text>
+                        <Text style={{fontSize: 90, fontWeight: "bold", color: "white"}}>{currentHour}</Text>
                     </View>
 
-                    <View style={{height: "33.33%", justifyContent: "center", alignItems: "center"}}>
+                    <View style={{height: "30%", justifyContent: "flex-end", alignItems: "center"}}>
                         {/* Date */}
-                        <Text style={{fontSize: 45, fontWeight: "bold", textAlign: "center", paddingHorizontal: 30}}>{currentDate}</Text>
+                        <Text style={{fontSize: 45, fontWeight: "bold", textAlign: "center", paddingHorizontal: 30, color: "white"}}>{currentDate}</Text>
                     </View>
 
-                    <View style={{height: "33.33%", justifyContent: "flex-start", alignItems: "center"}}>
+                    <View style={{height: "35%", justifyContent: "center", alignItems: "center"}}>
                         {/* Meteo */}
-                        <Text style={{fontSize: 30, marginVertical: 20}}>Aujourd'hui:</Text>
+                        <Text style={{fontSize: 30, marginVertical: 20, color: "white"}}>Aujourd'hui:</Text>
                         <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
                             {/* Left */}
                             <View style={{width: "50%", paddingRight: 10, alignItems: "flex-end"}}>
@@ -645,16 +734,24 @@ export default function SeniorPage({ navigation }) {
                             {/* Right */}
                             <View style={{width: "50%", paddingLeft: 10, flexDirection: "row"}}>  
                                 {/* Temperature */}
-                                <Text style={{fontSize: 40, fontWeight: "bold"}}>{currentTemp}</Text>
-                                <Text style={{fontSize: 20, fontWeight: "bold"}}>c</Text>
-                                <Text style={{fontSize: 15, marginTop: 3}}>°</Text>
+                                <Text style={{fontSize: 40, fontWeight: "bold", color: "white"}}>{currentTemp}</Text>
+                                <Text style={{fontSize: 20, fontWeight: "bold", color: "white"}}>c</Text>
+                                <Text style={{fontSize: 15, marginTop: 3, color: "white"}}>°</Text>
                             </View>
                         </View>
                     </View>
-                </View>
+                    <View style={{height: "10%", padding:20, flexDirection:"row", justifyContent: "flex-end", alignItems: "flex-end"}}>
+                        <TouchableOpacity style={{}}>
+                            <FontAwesome name="lock" size={38} color="#ffffff" onPress={() => handleSignOut()}/>
+                        </TouchableOpacity>
+                        
+                        {/* <Button title="logout"  color="#ffffff" onPress={() => handleSignOut()}/>
+                        <Button title="refresh" color="#ffffff"  onPress={() => setCurrentWeather()}/> */}
+                    </View>
+                </LinearGradient>
             </View>
             {/* Bottom */}
-            <View style={{height: "10%", width: "100%", backgroundColor: "black", flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
+            {/* <View style={{height: "10%", width: "100%", backgroundColor: "black", flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
                 <View style={{height: "80%", width: "3.5%", backgroundColor: "green"}}></View>
                 <View style={{height: "80%", width: "3.5%", backgroundColor: "green"}}></View>
                 <View style={{height: "80%", width: "3.5%", backgroundColor: "green"}}></View>
@@ -679,7 +776,7 @@ export default function SeniorPage({ navigation }) {
                 <View style={{height: "80%", width: "3.5%", backgroundColor: "#363636"}}></View>
                 <View style={{height: "80%", width: "3.5%", backgroundColor: "#363636"}}></View>
                 
-            </View>
+            </View> */}
         </View>
     )
 }

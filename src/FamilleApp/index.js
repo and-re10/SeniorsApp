@@ -7,7 +7,7 @@ import requestCameraAndAudioPermission from "../services/Permissons";
 import { Platform } from 'react-native';
 import seniorsApi from "../api/app";
 
-import VideoCallModal from "../components/VideoCallModal";
+import FamilleVideoCallModal from "../components/FamilleVideoCallModal";
 import { io } from "socket.io-client";
 import {
     checkMultiple,
@@ -728,9 +728,12 @@ export default function FamillePage({ navigation }) {
                 </View>
                 {
                     videoCall ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isVideoCallModalVisible} nRequestClose={() => changeVideoCallModalVisible(false)}>
-                        <VideoCallModal role={role}  changeModalVisible={changeVideoCallModalVisible}  fam_name={user.user_name} senior_name={senior.prenom}  image_senior={videoCall?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation}/>
+                        <FamilleVideoCallModal role={role}  changeModalVisible={changeVideoCallModalVisible}  fam_name={user.user_name} senior_name={senior.prenom}  user_image={videoCall?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation}/>
                     </Modal> : <View></View> 
                 }
+                {/* <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={true} nRequestClose={() => changeVideoCallModalVisible(false)}>
+                        <FamilleVideoCallModal role={role}  changeModalVisible={changeVideoCallModalVisible}  fam_name={user.user_name} senior_name={senior.prenom}  user_image={videoCall?.user_img} _checkPermissions={_checkPermissions} callData={callData} setCallData={setCallData} navigation={navigation}/>
+                    </Modal> */}
 
                 {filterPage()}
 
