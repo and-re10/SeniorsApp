@@ -25,6 +25,9 @@ target 'seniorsApp' do
   pod 'Firebase/Messaging'
   # , '~> 5.19.0' ou "~> 6.13.0"
 
+  # pod 'FirebaseCore', :path => '/path/to/firebase-ios-sdk'
+  # pod 'FirebaseMessaging', :path => '/path/to/firebase-ios-sdk'
+
 
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'

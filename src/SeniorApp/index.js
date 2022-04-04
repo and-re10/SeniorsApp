@@ -223,7 +223,7 @@ export default function SeniorPage({ navigation }) {
         setWeatherDescription(data[6]);
 
 
-        console.warn(data);
+        // console.warn(data);
     }
 
     function convertKelvinInC(kelvin){
@@ -241,18 +241,20 @@ export default function SeniorPage({ navigation }) {
         console.log(user.user_id);
         seniorsApi.get(`/get-senior/${user.user_id}`).then(response => {
             console.log(`Senior${response.data.nom}`);
-            console.warn(response.data.maison_repo_id);
+            // console.warn(response.data.maison_repo_id);
             seniorsApi.get(`/get-maison-repo/${response.data.maison_repo_id}`).then(response => {
-                console.warn(response.data);
+                // console.warn(response.data);
                 setMaisonRepo(response.data);
             });
             // console.warn(response.data.maison_repo_id)
             seniorsApi.get(`/get-menus/${response.data.maison_repo_id}`).then(response => {
                 setMenus(response.data);
-                console.warn(`Menus: ${response.data[0].date}`);
+                // console.warn(`Menus: ${response.data[0].date}`);
                 updateDate();
             })
         })
+
+        return () => console.log("senior deconnecté"); 
     }, []);
 
     // End Menus 
@@ -263,16 +265,21 @@ export default function SeniorPage({ navigation }) {
     var testNotif = null;
 //   const messaging = firebase.messaging();
 
+
+
     useEffect(() => {
-        messaging().hasPermission().then( async enabled => {
+        // console.warn(WIDTH)
+        // console.warn('test')
+        messaging().requestPermission();
+        messaging().hasPermission().then( async  enabled => {
+            // console.warn(enabled);
             // if (enabled) {
+                // console.warn('true')
                 await messaging().registerDeviceForRemoteMessages()
-                // messaging().registerDeviceForRemoteMessages( remoteMessage => {
-                //     console.warn('register')
-                // })
+
                 messaging().getToken()
                 .then( token => {
-                    console.log("TOKEN: ", token);
+                    console.warn("TOKEN: ", token);
                     // Alert.alert(token)
                     // setFBToken(token);
                 })
@@ -281,58 +288,123 @@ export default function SeniorPage({ navigation }) {
                 }); 
                 
                 messaging().onTokenRefresh( token => {
-                    console.log("Refreshed Token: ", token);
+                    console.warn("Refreshed Token: ", token);
                 });
 
-                testNotif = messaging.onMessage( async remoteMessage => {
+                testNotif = messaging().onMessage( async remoteMessage => {
                     // if (AppState.currentState === "active") {
                         console.warn('A new message arrived!', remoteMessage.data);
+                        console.warn(remoteMessage.data.type === "Message")
+                        if( remoteMessage.data.type === "call"){
+                            if (remoteMessage.data.senior_code == user.senior_code && remoteMessage.data.role === 'senior'){
+                                // console.warn(data.senior_code, response.data.senior_code, data.user_img)
+                                setVideoCall(remoteMessage.data);
+                                // console.warn(msg);
+                                setIsVideoCallModalVisible(true);
+                            }
+                        } else if (remoteMessage.data.type === "Message"){
+                            console.warn(remoteMessage.data.type)
+                            setMessages(remoteMessage.data);
+                            // console.warn(msg);
+                            setIsModalVisible(true);
+                        }
+                        // console.warn(data.senior_code, user.senior_code, data.user_img)
+
+                        // setVideoCall(remoteMessage.data);
+                        // // console.warn(data);
+                        // // console.warn(msg);
+                        // setIsVideoCallModalVisible(true);
+
+                        // seniorsApi.get(`/get-senior/${user.senior_id}`).then( response => {
+                            // console.warn(data.senior_code, response.data.code, user.user_name, data.user, data.to)
+                            // console.warn(response.data);
+                            // setSenior(response.data);
+                            // console.warn(remoteMessage.data.senior_code == user.senior_code );// && remoteMessage.data.to === "senior"
+                            // console.warn(remoteMessage.data.senior_code + " - " + user.senior_code + " - " + remoteMessage.data.role)
+
+                            // test message and call with notifications
+                            // if (remoteMessage.data.senior_code == user.senior_code && remoteMessage.data.role === 'senior'){
+                            //     // console.warn(data.senior_code, response.data.senior_code, data.user_img)
+                            //     setVideoCall(remoteMessage.data);
+                            //     // console.warn(msg);
+                            //     setIsVideoCallModalVisible(true);
+                            // }
+                            // end test message and call with notifications
+
+                        // });
                         // Push notification IOS
-                        PushNotificationIOS.presentLocalNotification({
-                            alertTitle: remoteMessage.data.title,
-                            alertBody: remoteMessage.data.body,
-                            isSilent: true,
-                            // soundName: "zak_music.mp3",
-                        });
+                        // PushNotificationIOS.presentLocalNotification({
+                        //     alertTitle: remoteMessage.data.title,
+                        //     alertBody: remoteMessage.data.body,
+                        //     isSilent: true,
+                        //     // soundName: "zak_music.mp3",
+                        // });
+                        // console.warn('onMessage');
+                        // Linking.openURL("seniorsApp://")
                         // End Push Notification IOS
                         // Linking.openURL("seniorsApp://app")
                         // stopSound
                     // }
                 })
+
+                
+
+                // messaging().setBackgroundMessageHandler(async remoteMessage => {
+                //     // Linking.openURL("seniorsApp://")
+                //     console.log("setBackgroundMessageHandler(")
+                // });
+
+                messaging().onNotificationOpenedApp(remoteMessage => {
+                    console.warn(remoteMessage.data);
+                    if (remoteMessage.data.senior_code == user.senior_code && remoteMessage.data.to === 'senior'){
+                        // console.warn(data.senior_code, response.data.senior_code, data.user_img)
+                        setVideoCall(remoteMessage.data);
+                        // console.warn(msg);
+                        setIsVideoCallModalVisible(true);
+                    }
+                    // setStopNotif(true);
+                    // console.warn(stopNotif);
+                    // PushNotificationIOS.presentLocalNotification({
+                    //         alertTitle: remoteMessage.data.title,
+                    //         alertBody: remoteMessage.data.body,
+                    //         isSilent: true,
+                    //         // soundName: "zak_music.mp3",
+                    //     });
+                    // // Linking.openURL("seniorsApp://");
+                    // console.log("onNotificationOpenedApp");
+                });
+
+                messaging().getInitialNotification( remoteMessage => {
+                    // notificationTimer(remoteMessage);
+                    // setStopNotif(true);
+                    // console.warn(stopNotif);
+                    PushNotificationIOS.presentLocalNotification({
+                        alertTitle: remoteMessage.data.title,
+                        alertBody: remoteMessage.data.body,
+                        isSilent: true,
+                        // soundName: "zak_music.mp3",
+                    });
+                    // Linking.openURL("seniorsApp://");
+                    // console.log("getInitialNotification");
+                });
                 // console.warn(role);
 
                 // if (role === "senior"){
-                    var TOPIC = `Senior-${user.user_id}`;
+                //     var TOPIC = `Senior-${user.user_id}`;
                 // } else {
-                //     var TOPIC = `Famille-${user.user_id}`;
+                    var TOPIC = `Senior`;// Senior-${user.user_id}
+                    // console.log(TOPIC);
                 // }
                 
                 messaging()
                 .subscribeToTopic(TOPIC)
                 .then(() => {
                     console.warn(`Topic: ${TOPIC} Suscribed`);
-                    // Senior
+                    // Famille
                 });
-            // } else {
 
-            //     messaging().requestPermission()
-            //     .then( async authStatus => {
-            //         console.log("APNs Status: ", authStatus);
-            //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
-            //             // await firebase.messaging().registerDeviceForRemoteMessages()
-            //             messaging().getToken()
-            //             .then( token => {
-            //                 console.log("Messaging Token: ", token);
-            //             }).catch( error => {
-            //                 console.log("Error: " , error);
-            //             });
-            //         // }
-            //     })
-            //     .catch ( error => {
-            //         console.error(error);
-            //     });
-            // }
         })
+        
     }, []);
 
     useEffect(() => {
@@ -419,32 +491,32 @@ export default function SeniorPage({ navigation }) {
     // }, []);
 
     useEffect(() => {
-        console.warn(user?.user_img)
+        // console.warn(user?.user_img)
         // Get senior data
         seniorsApi.get(`/get-senior-famille/${user.user_id}`).then( response => {
             // console.warn(response.data)
             setFamille(response.data);
         });
-        const newSocket = io('https://seniors-app-notification.herokuapp.com/');   
-        setSocket(newSocket);
-        newSocket.on("hello", (msg) => {
-            if (msg.senior_code === user.senior_code){
-                // console.warn(msg.senior_code, user.senior_code)
-                setMessages(msg);
-                console.warn(msg);
-                setIsModalVisible(true);
-            }
+        // const newSocket = io('https://seniors-app-notification.herokuapp.com/');   
+        // setSocket(newSocket);
+        // newSocket.on("hello", (msg) => {
+        //     if (msg.senior_code === user.senior_code){
+        //         // console.warn(msg.senior_code, user.senior_code)
+        //         setMessages(msg);
+        //         // console.warn(msg);
+        //         setIsModalVisible(true);
+        //     }
             
-        });
-        newSocket.on('videoCall', (data) => {
-            if (data.senior_code === user?.senior_code && data?.to === "senior"){
-                // console.warn(data.senior_code, user.senior_code, data.user_img)
-                setVideoCall(data);
-                console.warn(data);
-                // console.warn(msg);
-                setIsVideoCallModalVisible(true);
-            }
-        })
+        // });
+        // newSocket.on('videoCall', (data) => {
+        //     if (data.senior_code === user?.senior_code && data?.to === "senior"){
+        //         // console.warn(data.senior_code, user.senior_code, data.user_img)
+        //         setVideoCall(data);
+        //         // console.warn(data);
+        //         // console.warn(msg);
+        //         setIsVideoCallModalVisible(true);
+        //     }
+        // })
         
     }, [])
 
@@ -531,7 +603,7 @@ export default function SeniorPage({ navigation }) {
                 //     )
                 // })
                 messages ? <Modal supportedOrientations={['portrait', 'landscape']} transparent={true} animationType='fade' visible={isModalVisible} nRequestClose={() => changeModalVisible(false)}>
-                    <SeniorNotifModal fam_image={messages.photo}  changeModalVisible={changeModalVisible} message={messages.message} username={messages.user}/>
+                    <SeniorNotifModal fam_image={messages.user_img}  changeModalVisible={changeModalVisible} message={messages.body} username={messages.user}/>
                 </Modal> : <View></View> 
             }
             {
@@ -635,7 +707,7 @@ export default function SeniorPage({ navigation }) {
                         // let reverseDate = `${dd}-${mm}-${yyyy}`;
                         
                         // console.warn(menu.date + "===" + todayDate);
-                        console.warn(menu);
+                        // console.warn(menu);
                         if(menu.date === todayDate){
                             if(updateMenu == "dejeuner"){
                                 return (
@@ -742,7 +814,7 @@ export default function SeniorPage({ navigation }) {
                     </View>
                     <View style={{height: "10%", padding:20, flexDirection:"row", justifyContent: "flex-end", alignItems: "flex-end"}}>
                         <TouchableOpacity style={{}}>
-                            <FontAwesome name="lock" size={38} color="#ffffff" onPress={() => handleSignOut()}/>
+                            <FontAwesome name="lock" size={38} color="#333333" onPress={() => handleSignOut()}/>
                         </TouchableOpacity>
                         
                         {/* <Button title="logout"  color="#ffffff" onPress={() => handleSignOut()}/>

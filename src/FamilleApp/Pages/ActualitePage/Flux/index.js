@@ -30,7 +30,7 @@ export default function Flux(props) {
 
     const getSenior = async (usr) => {
         try {
-            console.warn(usr.senior_id);
+            // console.warn(usr.senior_id);
             const response = await seniorsApi.get(`get-senior/${usr.senior_id}`)
             console.warn(response.data.maison_repo_id);
             getMaisonRepo(response.data.maison_repo_id);
@@ -43,10 +43,10 @@ export default function Flux(props) {
     const getMaisonRepo = async (resp) => {
         try {
             const response = await seniorsApi.get(`get-maison-repo/${resp}`)
-            console.warn(response.data);
+            // console.warn(response.data);
             setMaisonRepo(response.data);
         } catch (error) {
-            console.warn(error)
+            // console.warn(error)
         }
     }
 
@@ -61,8 +61,10 @@ export default function Flux(props) {
     }
 
     useEffect(() => {
+        // console.warn(user)
         // get maison de repo data
         getSenior(user);
+        // getPosts
         // seniorsApi.get(`get-senior/${user.senior_id}`).then(response => {
         //     console.warn(response.data.maison_repo_id)
         //     getSenior(response)
@@ -76,17 +78,9 @@ export default function Flux(props) {
         //     //     console.warn(response.data);
         //     // })
         // })
-        
+        return () => console.warn('Changement de page (post)')
     }, []);
-    // function createPost(nb){
-    //     for( let i = 0; i <= nb; i++){
-    //         setPosts([...posts, i]);
-    //     };
-    // };
 
-    // useEffect(() => {
-    //     createPost(5);
-    // }, [posts]);
 
     return (
         <View style={{height: "95%", backgroundColor: "#f4f4f4", display: props.display}}>

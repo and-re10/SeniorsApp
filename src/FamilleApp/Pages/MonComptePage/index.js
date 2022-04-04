@@ -21,6 +21,8 @@ import RNFetchBlob from 'rn-fetch-blob';
 // Send Remote Message
 // import remoteMessagefunction from "../../../../remoteMessageFirebase/index2";
 
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";//plus
+
 export default function MonComptePage(props) {
 
     const { signed, loading, user, signOut } = useContext(AuthContext);
@@ -223,6 +225,7 @@ export default function MonComptePage(props) {
         //     setMyUser(response.data);
         //     console.warn(response.data);
         // });
+        return () => console.log('Changement de page (mon compte)')
     }, []);
 
     function handleSignOut(){
@@ -240,8 +243,14 @@ export default function MonComptePage(props) {
             {/* <Text>Mon Compte Page</Text> */}
             {/* Image */}
             {/* https://test.tabtab.eu/storage/images/${myUser?.photo_profil} */}
-            { imagePath ? <Image source={{uri: imagePath}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} /> : <Image source={{uri: `https://test.tabtab.eu/storage/images/${myUser?.photo_profil}`}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} />
-            }
+            <View style={{height: 170, width: 170, borderRadius: 100, marginTop: 100, marginBottom: 50, position: "relative"}}>
+                { imagePath ? <Image source={{uri: imagePath}} style={{height: "100%", width: "100%", borderRadius: 100}} /> : <Image source={{uri: `https://test.tabtab.eu/storage/images/${myUser?.photo_profil}`}} style={{height: 170, width: 170, borderRadius: 100}} />
+                }
+                <TouchableOpacity style={{position: "absolute", zIndex: 2, height: "100%", width: "100%", borderRadius: 100, backgroundColor: 'rgba(40, 42, 53, .5)'}} onPress={() => setIsModalVisible(true)}>
+                    <FontAwesome5 name="plus" style={{position: "absolute", bottom: "40%", left: "42%"}} size={31} color={"white"} solid/>
+                    {/* <Text style={{position: "absolute", bottom: "42%", left: "47%"}}>+</Text> */}
+                </TouchableOpacity>
+            </View>
             {/* <Image source={{uri: `http://192.168.0.156:8000/storage/images/${myUser?.photo_profil}`}} style={{height: 170, width: 170, borderRadius: 100, marginTop: 100}} /> */}
             
             {/* <RNPickerSelect
@@ -280,9 +289,12 @@ export default function MonComptePage(props) {
                     </View>
                 </TouchableOpacity>
             </Modal>
-            <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, marginVertical: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={() => setIsModalVisible(true)}>
+
+            {/* BUTTON POUR CHANGER LA PHOTO */}
+            {/* <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, marginVertical: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={() => setIsModalVisible(true)}>
                 <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>Modifier photo de profil</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+
             {/* <Button title="Modifier photo de profil" onPress={() => {
                 setIsModalVisible(true)
             }}/> */}
@@ -348,7 +360,7 @@ export default function MonComptePage(props) {
             {/* Nom du Senior */}
             <Text style={{fontWeight: "bold", fontSize: 20, marginVertical: 20}}>{myUser?.prenom} {myUser?.nom}</Text>
 
-            <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={() => handleSignOut()}>
+            <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10, marginTop: 50}} onPress={() => handleSignOut()}>
                 <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>Me Déconnecter</Text>
             </TouchableOpacity>
             </ScrollView>

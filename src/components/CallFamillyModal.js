@@ -62,18 +62,18 @@ export default function CallFamillyModal(props) {
         // props.setData(data);
     };
 
-    const handleVideoCall = () => {
+    // const handleVideoCall = () => {
         
-        let content = {
-            username: props.fam_name,
-            to: "famille",
-            senior_code: props.senior_code,
-            user_img: props.image_senior
-        }
-        props.socket.emit('videoCall', content);
-        // console.warn(user.user_name);
+    //     let content = {
+    //         username: props.fam_name,
+    //         to: "famille",
+    //         senior_code: props.senior_code,
+    //         user_img: props.image_senior
+    //     }
+    //     props.socket.emit('videoCall', content);
+    //     // console.warn(user.user_name);
         
-    };
+    // };
 
 
 
@@ -91,59 +91,59 @@ export default function CallFamillyModal(props) {
                     <TouchableOpacity style={{ width: "100%", paddingVertical: 20, backgroundColor: "green", flexDirection: "row", borderRadius: 10, justifyContent: "center", alignItems: "center", zIndex: 5}} onPress={() => {
                         closeModal(false);
                         // stopSound()
-                        handleVideoCall();
+                        // handleVideoCall();
                         // console.warn(props.senior_name)
 
-                        messaging().hasPermission().then( async enabled => {
-                            console.warn(enabled);
-                            // if (enabled) {
-                                // console.warn('true')
-                                await messaging().registerDeviceForRemoteMessages()
-                                messaging().getToken()
-                                .then( token => {
-                                    console.warn("TOKEN: ", token);
-                                    // Alert.alert(token)
-                                    // setFBToken(token);
-                                })
-                                .catch( error => {
-                                    console.error(error)
-                                }); 
+                        // messaging().hasPermission().then( async enabled => {
+                        //     // console.warn(enabled);
+                        //     // if (enabled) {
+                        //         // console.warn('true')
+                        //         await messaging().registerDeviceForRemoteMessages()
+                        //         messaging().getToken()
+                        //         .then( token => {
+                        //             // console.warn("TOKEN: ", token);
+                        //             // Alert.alert(token)
+                        //             // setFBToken(token);
+                        //         })
+                        //         .catch( error => {
+                        //             console.error(error)
+                        //         }); 
                                 
-                                messaging().onTokenRefresh( token => {
-                                    console.log("Refreshed Token: ", token);
-                                });
+                        //         messaging().onTokenRefresh( token => {
+                        //             console.log("Refreshed Token: ", token);
+                        //         });
                 
-                                // if (role === "senior"){
-                                //     var TOPIC = `Senior-${user.user_id}`;
-                                // } else {
-                                    var TOPIC = `Famille-${props.fam_id}${props.senior_id}`;
-                                // }
+                        //         // if (role === "senior"){
+                        //         //     var TOPIC = `Senior-${user.user_id}`;
+                        //         // } else {
+                        //             var TOPIC = `Famille-${props.fam_id}${props.senior_id}`;
+                        //         // }
                                 
-                                messaging()
-                                .subscribeToTopic(TOPIC)
-                                .then(() => {
-                                    console.warn(`Topic: ${TOPIC} Suscribed`);
-                                });
-                            // } else {
-                            //     // console.warn('false')
-                            //     messaging().requestPermission()
-                            //     .then( async authStatus => {
-                            //         console.warn("APNs Status: ", authStatus);
-                            //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
-                            //             // await firebase.messaging().registerDeviceForRemoteMessages()
-                            //             messaging().getToken()
-                            //             .then( token => {
-                            //                 console.log("Messaging Token: ", token);
-                            //             }).catch( error => {
-                            //                 console.log("Error: " , error);
-                            //             });
-                            //         // }
-                            //     })
-                            //     .catch ( error => {
-                            //         console.error(error);
-                            //     });
-                            // }
-                        })
+                        //         messaging()
+                        //         .subscribeToTopic(TOPIC)
+                        //         .then(() => {
+                        //             // console.warn(`Topic: ${TOPIC} Suscribed`);
+                        //         });
+                        //     // } else {
+                        //     //     // console.warn('false')
+                        //     //     messaging().requestPermission()
+                        //     //     .then( async authStatus => {
+                        //     //         console.warn("APNs Status: ", authStatus);
+                        //     //         // if(authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL){
+                        //     //             // await firebase.messaging().registerDeviceForRemoteMessages()
+                        //     //             messaging().getToken()
+                        //     //             .then( token => {
+                        //     //                 console.log("Messaging Token: ", token);
+                        //     //             }).catch( error => {
+                        //     //                 console.log("Error: " , error);
+                        //     //             });
+                        //     //         // }
+                        //     //     })
+                        //     //     .catch ( error => {
+                        //     //         console.error(error);
+                        //     //     });
+                        //     // }
+                        // })
 
                         props._checkPermissions(() => {
                             let room = `${props.senior_name}${props.fam_name}ROOM`
@@ -152,12 +152,17 @@ export default function CallFamillyModal(props) {
                             .then((response) => {
                                 // console.warn(props.senior_name)
                                 if (response.ok) {
-                                    // console.warn(props.fam_id)
+                                    // console.warn(props.fam_id) // http://192.168.0.156:5000 - https://senior-video-call.herokuapp.com
                                     axios.post('https://senior-video-call.herokuapp.com/remote-message', {
-                                            messageTitle: "Call de André",
-                                            messageBody: "André vous appelle...",
-                                            messageUser: "andre",
-                                            firebaseTopic: `Famille-${props.fam_id}${props.senior_id}`,
+                                        messageTitle: `Call de ${props.senior_name}`,
+                                        messageBody: `${props.senior_name} vous appelle...`,
+                                        messageUser: props.senior_name,
+                                        role: "famille",
+                                        type: "call",
+                                        senior_code: props.senior_code.toString(),
+                                        user_img: props.image_senior,
+                                        firebaseTopic: `Famille-${props.fam_id}${props.senior_id}`,// Envoyer vers le senior specifique
+
                                     }).then(response => {
                                         // console.warn("response: " + response);
                                     }).catch(error => {

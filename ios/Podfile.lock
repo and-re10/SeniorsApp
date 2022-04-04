@@ -363,6 +363,11 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
+  - RNNotifee (3.0.1):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 3.0.1)
+  - RNNotifee/NotifeeCore (3.0.1):
+    - React-Core
   - RNPermissions (3.0.3):
     - React-Core
   - RNReanimated (2.1.0):
@@ -454,6 +459,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -561,6 +567,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReanimated:
@@ -627,6 +635,7 @@ SPEC CHECKSUMS:
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
+  RNNotifee: aeafe138adea11e0cf716188d2fe1b7dd850888d
   RNPermissions: 034db8a73d562766f990c89abbdeaa5d6e204c67
   RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: bd1523c3bde7069b8e958e5a16e1fc7722ad0bdd
@@ -636,6 +645,6 @@ SPEC CHECKSUMS:
   TwilioVideo: a765f519bb8646187eaa0e9f7443d08529ccba0a
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: 8cc60b4657cd7764ac9c93896a23f60fdb10058e
+PODFILE CHECKSUM: b9638b6a49b1f4b88f9e6a102f95cffcca24c834
 
 COCOAPODS: 1.11.0

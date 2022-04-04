@@ -22,6 +22,8 @@ export default function Menus(props) {
                 // console.warn(response.data)
             })
         })
+
+        return () => console.warn("Changement de page (menu)")
     }, []);
 
     return (

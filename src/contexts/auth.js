@@ -48,12 +48,17 @@ export const AuthProvider = ({ children }) => {
     // }, []);
 
     async function signInFamille(email, password) {
+
         const response = await authSeniorsApi.post('/login-famille', {
             "email": email,
             "password": password
         });
 
-        // console.warn(response.data.famille);
+        if (response.data.message){
+            alert('Mot de passe incorrecte');
+        }
+
+        console.warn(response);
         
         setUser(response.data.famille);
         setRole(response.data.famille.role);
@@ -63,6 +68,7 @@ export const AuthProvider = ({ children }) => {
         await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.data.famille));
         await AsyncStorage.setItem('@RNAuth:token', response.data.token);
         await AsyncStorage.setItem('@RNAuth:role', response.data.famille.role);
+
     }
 
     async function signInSenior(code){
@@ -75,7 +81,7 @@ export const AuthProvider = ({ children }) => {
         const response = await authSeniorsApi.post('/login-senior', {
             "code": code
         });
-        console.warn(response)
+        // console.warn(response)
         // console.warn(response.data.senior);
         
         setUser(response.data.senior);

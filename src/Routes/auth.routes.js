@@ -3,6 +3,10 @@ import AuthHome from "../Pages/AuthHome/index";
 import SignInSenior from "../SeniorApp/Pages/SignInSenior/index";
 import SignInFamille from "../FamilleApp/Pages/SignInFamille/index";
 import RegisterFamille from "../FamilleApp/Pages/RegisterPage/index";
+import GetEmailPage from "../FamilleApp/Pages/ForgotPassword/GetEmailPage";
+import GetCodePage from "../FamilleApp/Pages/ForgotPassword/GetCodePage";
+import ResetPasswordPage from "../FamilleApp/Pages/ForgotPassword/ResetPasswordPage";
+
 
 // import Register from "../Pages/Register/index";
 
@@ -14,12 +18,22 @@ function AuthRoutes(){
     return (
         <AuthStack.Navigator>
             {/* Page Principal d'Authentification avec a proposition de se connecter comme senior ou membre de famille */}
-            <AuthStack.Screen name='AuthHome' component={AuthHome} options={{ headerShown: false }}/>            
+            <AuthStack.Screen name='AuthHome' component={AuthHome} options={{ 
+                title: "tabtab",
+                headerStyle: {
+                    backgroundColor: '#151515',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                }
+            }}/>            
             {/* Page SignIn Senior */}
             <AuthStack.Screen name='SignInSenior' component={SignInSenior} options={{
-                title: "SignIn Senior",
+                title: "Login",
+                headerBackTitle: "Retour",
                 headerStyle: {
-                    backgroundColor: 'grey',
+                    backgroundColor: '#151515',
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {
@@ -28,9 +42,13 @@ function AuthRoutes(){
             }}/>
             {/* Page SignIn Famille */}
             <AuthStack.Screen name='SignInFamille' component={SignInFamille} options={{
-                title: "SignIn Famille",
+                title: "Login",
+                headerBackTitle: "Retour",
+                // headerLeft: () => (
+                //     <Button>Back</Button>
+                // ),
                 headerStyle: {
-                    backgroundColor: 'grey',
+                    backgroundColor: '#151515',
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {
@@ -38,15 +56,49 @@ function AuthRoutes(){
                 },
             }}/>
             <AuthStack.Screen name="RegisterFamille" component={RegisterFamille} options={{
-                    title: "Register Famille",
-                    headerStyle: {
-                        backgroundColor: 'grey',
-                    },
-                    headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                }}/>
+                title: "Register",
+                headerBackTitle: "Retour",
+                headerStyle: {
+                    backgroundColor: '#151515',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}/>
+            <AuthStack.Screen name="GetEmailPage" component={GetEmailPage} options={{
+                title: "Reset Password",
+                headerBackTitle: "Retour",
+                headerStyle: {
+                    backgroundColor: '#151515',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}/>
+            <AuthStack.Screen name="GetCodePage" component={GetCodePage} options={{
+                title: "Reset Password",
+                headerBackTitle: "Retour",
+                headerStyle: {
+                    backgroundColor: '#151515',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}/>
+            <AuthStack.Screen name="ResetPasswordPage" component={ResetPasswordPage} options={{
+                title: "Reset Password",
+                headerBackTitle: "Retour",
+                headerStyle: {
+                    backgroundColor: '#151515',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}/>
                 
             {/* Page registrer Famille */}
             {/* <AuthStack.Screen name='Register' component={Register} options={{

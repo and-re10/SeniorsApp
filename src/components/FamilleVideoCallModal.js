@@ -1,14 +1,21 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import { View, Text, TouchableOpacity, Dimensions, Image } from 'react-native'
 import Sound from 'react-native-sound';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import AuthContext from "../contexts/auth";
+
+import { io } from "socket.io-client";
 
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT_MODAL = 150;
 
 
-export default function FamilleVideoCallModal(props) {
 
+export default function FamilleVideoCallModal(props) {
+    const [ roomName, setRoomName ] = useState(`${props.senior_name}${props.fam_name}ROOM`);
+    const [ socket, setSocket ] = useState("");
+    const { user } = useContext(AuthContext);
     
     useEffect(() => {
         // console.warn(props.senior_name);
@@ -29,10 +36,48 @@ export default function FamilleVideoCallModal(props) {
         });
         mySound.setVolume(0.9);
         mySound.release();
+
+        return () => {
+            console.warn("Stop Call Sound");
+            mySound.pause();
+        }
     })
+
+    useEffect(() => {
+        const newSocket = io('https://seniors-app-notification.herokuapp.com/'); // http://192.168.0.156:3000 - https://seniors-app-notification.herokuapp.com/
+        setSocket(newSocket);
+        console.warn(newSocket)
+        newSocket.on("endCall", data => {
+            console.warn(data)
+            if (data.to === roomName && data.user !== user.user_name){
+                // twilioVideo.current.disconnect();
+                // setCallData(initialState);
+                stopSound();
+                // refuseCall();
+                closeModal(false);
+            }
+            
+        });
+
+        return () => {
+            
+            console.warn("End Call")
+        }
+    }, []);
 
     stopSound = () => {
         mySound.pause()
+    }
+
+    const refuseCall = () => {
+        // let roomName = `${props.senior_name}${props.fam_name}ROOM`
+        console.warn(socket)
+        let content = {
+            to: roomName,
+            user: user.user_name
+        }
+
+        socket.emit('endCall', content);
     }
  
     const closeModal = (bool) => {
@@ -55,12 +100,16 @@ export default function FamilleVideoCallModal(props) {
                     <Text style={{color: "white", fontSize: 20, fontWeight: "bold"}}>{props.senior_name} vous appelle ...</Text>
                 </View>
                 <View style={{width: "100%", flexDirection: "row", justifyContent: "space-around"}}>
+                    {/* End Call */}
                     <TouchableOpacity style={{backgroundColor: "red", borderRadius: 80, marginRight: 15, justifyContent: "center", alignItems: "center", width: 80, height: 80}} onPress={() => {
-                        stopSound()
-                        closeModal(false)
+                        stopSound();
+                        refuseCall();
+                        closeModal(false);
                     }}>
                         <Text style={{color: "white", paddingVertical: 7, fontWeight: "bold", fontSize: 40}}><MaterialIcons name="call-end" size={38} color="#ffffff"/></Text>
                     </TouchableOpacity>
+
+                    {/* Accept Call */}
                     <TouchableOpacity style={{backgroundColor: "green", borderRadius: 80, justifyContent: "center", alignItems: "center", width: 80, height: 80}} onPress={() => {
                         stopSound()
                         closeModal(false);

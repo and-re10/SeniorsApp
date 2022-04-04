@@ -11,6 +11,6 @@ export default async function requestCameraAndAudioPermissions(){
             console.log("Permossion denied");
         }
     } catch (err) {
-        console.warn(err);
+        // console.warn(err);
     };
 };

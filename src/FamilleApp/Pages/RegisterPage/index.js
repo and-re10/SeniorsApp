@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StatusBar, TextInput, StyleSheet, Button, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, StatusBar, TextInput, StyleSheet, Button, ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native'
 import { authSeniorsApi } from "../../../api/auth";
 
 // Photo Picker
@@ -8,6 +8,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 // Formik et RFNetchBlob
 import { useFormik } from 'formik';
 import RNFetchBlob from 'rn-fetch-blob';
+
+const WIDTH = Dimensions.get('window').width;
 
 export default function RegisterFamille({ navigation }) {
     const [ nom, setNom ] = useState("");
@@ -151,7 +153,7 @@ export default function RegisterFamille({ navigation }) {
             
           ]).then((resp) => {
            Alert.alert("Upload success!");
-            console.warn(resp);
+            // console.warn(resp);
           }).catch((err) => {
             Alert.alert('An error occurred!', err.message, [{ text: 'Okay' }]);
           })
@@ -162,29 +164,100 @@ export default function RegisterFamille({ navigation }) {
     return (
         <>
             <StatusBar style="dark" backgroung="white" translucent={true} />
-                <ScrollView style={{flex: 1}}>
-                    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-                        <Text>Nom</Text>
+                <ScrollView style={{flex: 1, }}>
+                    <View style={{flex: 1, justifyContent: "center", alignItems: "center", paddingVertical: 30}}>
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%", marginVertical: 40, fontWeight: "bold"}}>
+                            Créez votre compte membre de famille
+                        </Text>
+
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%"}}>
+                            Nom:
+                        </Text>
+                        <TextInput 
+                            // autoCapitalize='none' 
+                            style={{backgroundColor: "lightgrey", height: WIDTH < 400 ? 50 : 55, width: "70%", borderRadius: 15, marginTop: 10, paddingHorizontal: 20, marginBottom: 15, fontSize: WIDTH < 400 ? 17 : 17}} 
+                            onChangeText={(text) => {
+                                setNom(text)
+                            }} 
+                            placeholderTextColor="white"
+                        />
+
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%"}}>
+                            Prenom:
+                        </Text>
+                        <TextInput 
+                            // autoCapitalize='none' 
+                            style={{backgroundColor: "lightgrey", height: WIDTH < 400 ? 50 : 55, width: "70%", borderRadius: 15, marginTop: 10, paddingHorizontal: 20, marginBottom: 15, fontSize: WIDTH < 400 ? 17 : 17}} 
+                            onChangeText={(text) => {
+                                setPrenom(text)
+                            }} 
+                            placeholderTextColor="white"
+                        />
+
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%"}}>
+                            Email:
+                        </Text>
+                        <TextInput 
+                            autoCapitalize='none' 
+                            autoCorrect={false}
+                            style={{backgroundColor: "lightgrey", height: WIDTH < 400 ? 50 : 55, width: "70%", borderRadius: 15, marginTop: 10, paddingHorizontal: 20, marginBottom: 15, fontSize: WIDTH < 400 ? 17 : 17}} 
+                            onChangeText={(text) => {
+                                setEmail(text)
+                            }} 
+                            placeholderTextColor="white"
+                        />
+
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%"}}>
+                            Password:
+                        </Text>
+                        <TextInput 
+                            autoCapitalize='none' 
+                            secureTextEntry={true}
+                            style={{backgroundColor: "lightgrey", height: WIDTH < 400 ? 50 : 55, width: "70%", borderRadius: 15, marginTop: 10, paddingHorizontal: 20, marginBottom: 15, fontSize: WIDTH < 400 ? 17 : 17}} 
+                            onChangeText={(text) => {
+                                setPassword(text)
+                            }} 
+                            placeholderTextColor="white"
+                        />
+
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%"}}>
+                            Senior Code:
+                        </Text>
+                        <TextInput 
+                            // autoCapitalize='none' 
+                            keyboardType='numeric'
+                            maxLength={6}
+                            style={{backgroundColor: "lightgrey", height: WIDTH < 400 ? 50 : 55, width: "70%", borderRadius: 15, marginTop: 10, paddingHorizontal: 20, marginBottom: 15, fontSize: WIDTH < 400 ? 17 : 17}} 
+                            onChangeText={(text) => {
+                                setSeniorCode(text)
+                            }} 
+                            placeholderTextColor="white"
+                        />
+                        
+
+                        {/* <Text>Nom</Text>
                         <TextInput placeholder="Entrer votre nom" style={styled.input} placeholderTextColor="white" onChangeText={(text => {
                             setNom(text)
                         })} />
                         <Text>Prenom</Text>
                         <TextInput placeholder="Entrer votre prenom" style={styled.input} placeholderTextColor="white" onChangeText={(text => {
                             setPrenom(text)
-                        })}/>
-                        <Text>Email</Text>
+                        })}/> */}
+                        {/* <Text>Email</Text>
                         <TextInput placeholder="Entrer votre email" style={styled.input} placeholderTextColor="white" onChangeText={(text => {
                             setEmail(text)
-                        })}/>
-                        <Text>Password</Text>
+                        })}/> */}
+                        {/* <Text>Password</Text>
                         <TextInput secureTextEntry={true} placeholder="Entrer votre password" style={styled.input} placeholderTextColor="white" onChangeText={(text => {
                             setPassword(text)
-                        })}/>
-                        <Text>Senior Code</Text>
+                        })}/> */}
+                        {/* <Text>Senior Code</Text>
                         <TextInput placeholder="Entrer votre senior code" style={styled.input} placeholderTextColor="white" onChangeText={(text => {
                             setSeniorCode(text)
-                        })}/>
-                        <Text>Photo de Profil</Text>
+                        })}/> */}
+                        <Text style={{fontSize: WIDTH < 400 ? 15 : 20, width: "70%", textAlign: "center"}}>
+                            Photo de Profil:
+                        </Text>
                         <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10, marginVertical: 10}} onPress={takePhotoFromCalera}>
                             <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>Take New Photo</Text>
                         </TouchableOpacity>
@@ -198,14 +271,21 @@ export default function RegisterFamille({ navigation }) {
                         {/* <TextInput placeholder="Entrer votre senior code" style={styled.input} placeholderTextColor="white" onChangeText={(text => {
                             setSeniorCode(text)
                         })}/> */}
+                        <TouchableOpacity style={{backgroundColor: "#0d9a15", borderRadius: 10, justifyContent: "center", alignItems: "center", width: "55%", marginVertical:WIDTH < 400 ? 20 : 40}} onPress={formik.handleSubmit}>
+                            <Text style={{color: "white", paddingVertical: WIDTH < 400 ? 15 : 18, fontWeight: "bold", fontSize: WIDTH < 400 ? 15 : 20}}>Register</Text>
+                        </TouchableOpacity>
 
-                        <View style={{justifyContent: "center", alignItems: "center"}}>
+                        <TouchableOpacity style={{paddingVertical: 10, paddingHorizontal: 20, backgroundColor: "#2e2e2e", borderRadius: 10}} onPress={() => navigation.goBack()}>
+                            <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>Back</Text>
+                        </TouchableOpacity>
+                        {/* <View style={{justifyContent: "center", alignItems: "center"}}> */}
                             {/* <Button title="Register" style={{fontSize: 28, }} color="grey" onPress={() => handleRegisterFamille()}/> */}
-                            <Button title="Register" style={{fontSize: 28, }} color="grey" onPress={formik.handleSubmit}/>
-                        </View>
-                        <View style={{justifyContent: "center", alignItems: "center"}}>
-                            <Button title="Back" style={{fontSize: 28, }} color="grey" onPress={() => navigation.goBack()}/>
-                        </View>
+                            {/* <Button title="Register" style={{fontSize: 28, }} color="black" onPress={formik.handleSubmit}/>
+                        </View> */}
+                        
+                        {/* <View style={{justifyContent: "center", alignItems: "center"}}>
+                            <Button title="Back" style={{fontSize: 28, }} color="black" onPress={() => navigation.goBack()}/>
+                        </View> */}
                     </View>
                 </ScrollView>
             {/* <Container style={{flex: 1}}> */}

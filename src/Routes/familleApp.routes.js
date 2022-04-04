@@ -28,6 +28,7 @@ export default function FamilleAppRoutes() {
                 }}/>
                 <Stack.Screen name="Video" component={VideoPage} options={{ 
                     title: "Video",
+                    headerBackTitle: "Retour",
                     headerStyle: {
                         backgroundColor: 'grey',
                     },

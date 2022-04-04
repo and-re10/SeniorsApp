@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Dimensions, TextInput } from 'react-native'
+import axios from "axios";
 
 // const WIDTH = Dimensions.get('window').width;
 // const HEIGHT_MODAL = 150;
@@ -13,14 +14,44 @@ export default function SimpleModal(props) {
         props.changeModalVisible(bool);
         props.setData(data);
         if (data !==  "Cancel"){
-            let content = {
-                msg: message,
-                username: props.username,
-                senior_code: props.code,
-                photo: props.fam_image
-            }
-            props.socket.emit('hello', content);
+            // let content = {
+            //     msg: message,
+            //     username: props.username,
+            //     senior_code: props.code,
+            //     photo: props.fam_image
+            // }
+            // props.socket.emit('hello', content);
             // console.warn(props.username)
+            console.warn(`Senior-${props.senior_id}`);
+            axios.post('https://senior-video-call.herokuapp.com/remote-message', {
+                // Envoyer un message
+                messageTitle: `Message de ${props.username}`,
+                messageBody: `${message}`,
+                messageUser: props.username,
+                role: "senior",
+                type: "Message",
+                senior_code: props.code.toString(),
+                user_img: props.fam_image,
+                firebaseTopic: `Senior`,// Senior-${props.senior_id} //`Senior-${user.senior_id}`,// Envoyer vers le senior specifique
+                // to: "senior",
+                // type: "Message",// Definir le type de notification ( Appel ou Message)
+                // senior_code: props.code.toString(),
+                // user_img: props.fam_image,
+                // firebaseTopic: `Senior-${user.senior_id}`,//`Senior-${user.senior_id}`,// Envoyer vers le senior specifique
+            }).then(response => {
+                var notifData = [
+                    props.username,
+                    message,
+                    props.code,
+                    props.fam_image,
+                    props.senior_id
+                ]
+                
+                console.warn("response: " + response.data);
+                console.warn("notifData: " + notifData);
+            }).catch(error => {
+                console.error("error: " + error);
+            });
         }
     };
 

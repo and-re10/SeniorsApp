@@ -31,6 +31,7 @@ export default function SeniorAppRoutes() {
                     headerStyle: {
                         backgroundColor: 'black',
                     },
+                    headerBackTitle: "Retour",
                     headerTintColor: '#fff',
                     headerTitleStyle: {
                         fontWeight: 'bold',

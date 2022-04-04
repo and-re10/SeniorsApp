@@ -10,7 +10,7 @@ import Sound from 'react-native-sound';
 export default function SeniorNotifModal(props) {
 
     useEffect(() => {
-        console.warn(props.fam_image)
+        // console.warn(props.fam_image)
         // Sound.setCategory('Playback');
         mySound = new Sound('Pop_Ding_Notification_Sound_01.wav',Sound.MAIN_BUNDLE,(error)=>{
             if(error){
